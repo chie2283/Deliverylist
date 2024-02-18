@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import static net.sejuku.terakoya.deliverylist.DestinationDao.*;
 
 @Controller
+@RequestMapping(value = "/destination")
 public class DestinationController {
     Logger logger = LoggerFactory.getLogger(DestinationController.class);
     private DestinationDao destinationDao;
@@ -20,43 +21,37 @@ public class DestinationController {
         this.destinationDao = destinationDao;
     }
 
-    @GetMapping("/destination")
+    @GetMapping("/")
     public String index(Model model) {
         logger.debug("index in");
         model.addAttribute("destinationList", destinationDao.findAll());
-        return "destinationIndex";
+        return "/destination/index";
     }
 
-    @PostMapping("/destinationAdd")
-    public String add(@ModelAttribute DestinationForm form) {
-        logger.info("{}", form.toString());
-        return "redirect:/destination";
-    }
-
-    @PostMapping("/destinationDelete")
+    @PostMapping("/delete")
     public String delete(@RequestParam String id) {
         logger.info("delete id is {}", id);
         destinationDao.delete(id);
-        return "redirect:/destination";
+        return "redirect:/destination/";
     }
 
-    @GetMapping("/destinationEdit")
+    @GetMapping("/edit")
     public String edit(@RequestParam String id, Model model) {
         logger.debug("edit in");
         model.addAttribute("isEdit", true);
         model.addAttribute("destination", destinationDao.find(id));
-        return "destinationEdit";
+        return "/destination/edit";
     }
 
-    @GetMapping("/destinationNew")
+    @GetMapping("/new")
     public String new_entry(Model model) {
         logger.debug("new in");
         model.addAttribute("isEdit", false);
         model.addAttribute("destination", new DestinationInfo(-1,""));
-        return "destinationEdit";
+        return "/destination/edit";
     }
 
-    @PostMapping("/destinationRegister")
+    @PostMapping("/register")
     public String registry(@ModelAttribute DestinationEditForm form) {
         logger.debug("registry in {}", form.destinationId);
         if (form.isEdit) {
@@ -70,6 +65,6 @@ public class DestinationController {
                     form.destinationName
             ));
         }
-        return "redirect:/destination";
+        return "redirect:/destination/";
     }
 }

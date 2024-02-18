@@ -17,13 +17,13 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <form action="/destinationEdit" method="get">
+                                        <form action="/destination/edit" method="get">
                                             <button type="submit" class="btn btn-primary">編集</button>
                                             <input type="hidden" name="id" th:value="${destination.id}" />
                                         </form>
                                     </td>
                                     <td>
-                                        <form action="/destinationDelete" method="post">
+                                        <form action="/destination/delete" method="post">
                                             <button class="btn brn-primary">削除</button>
                                             <input type="hidden" name="id" th:value="${destination.id}" />
                                         </form>
@@ -34,7 +34,7 @@
                     </tr>
                 </tbody>
             </table>
-            <form action="/destinationNew" method="get">
+            <form action="/destination/new" method="get">
                 <div class="d-flex justify-content-start">
                     <button type="submit" class="btn btn-primary">追加</button>
                 </div>

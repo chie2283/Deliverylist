@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -21,9 +22,9 @@ public class PrescriptionDao {
             Integer enteralNutrientId,
             String enteralNutrientName,
             String dosage,
-            String dt,
+            Date dt,
             Integer days,
-            String deliveryDt,
+            Date deliveryDt,
             Integer doneDays,
             Boolean done
     ) {}
@@ -33,9 +34,9 @@ public class PrescriptionDao {
             String patientId,
             String enteralNutrientId,
             String dosage,
-            String dt,
+            Date dt,
             Integer days,
-            String deliveryDt,
+            Date deliveryDt,
             Integer doneDays,
             Boolean done
     ) {}
@@ -56,7 +57,7 @@ public class PrescriptionDao {
                    rp.dt AS dt,
                    rp.days AS days,
                    rp.deliveryDt AS deliveryDt,
-                   rp.doneDays AS doneDays
+                   rp.doneDays AS doneDays,
                    rp.done AS done
             FROM prescription rp
             LEFT JOIN patient p ON(rp.patient_id = p.id)
@@ -78,7 +79,7 @@ public class PrescriptionDao {
                    rp.dt AS dt,
                    rp.days AS days,
                    rp.deliveryDt AS deliveryDt,
-                   rp.doneDays AS doneDays
+                   rp.doneDays AS doneDays,
                    rp.done AS done
             FROM prescription rp
             LEFT JOIN patient p ON(rp.patient_id = p.id)
@@ -97,16 +98,16 @@ public class PrescriptionDao {
     }
 
     void update(PrescriptionRecord rec) {
-        int rows = jdbcTemplate.update("UPDATE prescription SET patient_id = ?, enteralNutrient_id = ?, WHERE id = ?",
-                rec.patientId, rec.enteralNutrientId, rec.id);
+        int rows = jdbcTemplate.update("UPDATE prescription SET patient_id = ?, enteralNutrient_id = ?, dosage = ?, dt = ?, days = ?, deliveryDt = ?, doneDays = ?, done = ? WHERE id = ?",
+                rec.patientId, rec.enteralNutrientId, rec.dosage, rec.dt, rec.days, rec.deliveryDt, rec.doneDays, rec.done, rec.id);
         if (rows != 1) {
             throw new RuntimeException("更新処理で異常が発生しました");
         }
     }
 
     void insert(PrescriptionRecord rec) {
-        int rows = jdbcTemplate.update("INSERT INTO prescription (patient_id, enteralNutrient_id) VALUES(?, ?)",
-                rec.patientId, rec.enteralNutrientId);
+        int rows = jdbcTemplate.update("INSERT INTO prescription (patient_id, enteralNutrient_id, dosage, dt, days, deliveryDt, doneDays, done) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
+                rec.patientId, rec.enteralNutrientId, rec.dosage, rec.dt, rec.days, rec.deliveryDt, rec.doneDays, rec.done);
         if (rows != 1) {
             throw new RuntimeException("更新処理で異常が発生しました");
         }

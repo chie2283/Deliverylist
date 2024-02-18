@@ -67,7 +67,7 @@ public class DestinationDao {
    }
 
    void insert(DestinationRecord rec) {
-      int rows = jdbcTemplate.update("INSERT INTO destination (name) VALUES(?, ?)",
+      int rows = jdbcTemplate.update("INSERT INTO destination (name) VALUES(?)",
               rec.name);
       if (rows !=1) {
          throw new RuntimeException("更新処理で異常が発生しました");

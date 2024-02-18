@@ -40,15 +40,15 @@
                         <table>
                             <tr>
                                 <td>
-                                    <form action="/patientEdit" method="get">
+                                    <form action="/patient/edit" method="get">
                                         <button type="submit" class="btn btn-primary">編集</button>
-                                        <input type="hidden" name="id" th:value="${destination.id}" />
+                                        <input type="hidden" name="id" th:value="${prescription.id}" />
                                     </form>
                                 </td>
                                 <td>
-                                    <form action="/patientDelete" method="post">
+                                    <form action="/patient/delete" method="post">
                                         <button class="btn brn-primary">削除</button>
-                                        <input type="hidden" name="id" th:value="${destination.id}" />
+                                        <input type="hidden" name="id" th:value="${prescription.id}" />
                                     </form>
                                 </td>
                             </tr>
@@ -57,7 +57,7 @@
                 </tr>
                 </tbody>
             </table>
-            <form action="/patientNew" method="get">
+            <form action="/patient/new" method="get">
                 <div class="d-flex justify-content-start">
                     <button type="submit" class="btn btn-primary">追加</button>
                 </div>
