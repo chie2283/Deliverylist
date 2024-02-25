@@ -12,19 +12,19 @@ import org.springframework.web.bind.annotation.*;
 public class ScheduleController {
     Logger logger = LoggerFactory.getLogger(DestinationController.class);
     private DestinationDao destinationDao;
-    private PatientDao patientDao;
+    private PrescriptionDao prescriptionDao;
 
     @Autowired
-    ScheduleController(DestinationDao destinationDao, PatientDao patientDao) {
+    ScheduleController(DestinationDao destinationDao, PrescriptionDao prescriptionDao) {
         this.destinationDao = destinationDao;
-        this.patientDao = patientDao;
+        this.prescriptionDao = prescriptionDao;
     }
 
     @GetMapping("/")
     public String index(Model model) {
         logger.debug("index in");
         model.addAttribute("destinationList", destinationDao.findAll());
-        model.addAttribute("patient", patientDao.findAll());
+        model.addAttribute("prescriptionList", prescriptionDao.findAll());
         return "/schedule/";
     }
 }

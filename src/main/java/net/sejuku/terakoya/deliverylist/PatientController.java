@@ -7,34 +7,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import static net.sejuku.terakoya.deliverylist.PrescriptionDao.*;
+import static net.sejuku.terakoya.deliverylist.PatientDao.*;
 
 @Controller
 @RequestMapping(value = "/patient")
 public class PatientController {
     Logger logger = LoggerFactory.getLogger(PatientController.class);
-    private PrescriptionDao prescriptionDao;
     private PatientDao patientDao;
-    private EnteralNutrientDao enteralNutrientDao;
-    record PrescriptionEditForm(String id, String patientId, Boolean isEdit, String enteralNutrientId,
-                                String dosage, Date dt, Integer days, Date deliveryDt, Integer doneDays, Boolean done) {}
+    record PatientEditForm(String patientId, String patientName, String patientBirthday, Boolean isEdit) {}
 
     @Autowired
-    PatientController(PrescriptionDao prescriptionDao, PatientDao patientDao, EnteralNutrientDao enteralNutrientDao) {
-        this.prescriptionDao = prescriptionDao;
+    PatientController(PatientDao patientDao) {
         this.patientDao = patientDao;
-        this.enteralNutrientDao = enteralNutrientDao;
     }
 
     @GetMapping("/")
     public String index(Model model) {
         logger.debug("index in");
-        model.addAttribute("prescriptionList", prescriptionDao.findAll());
-        return "/patient/index";
+        model.addAttribute("patient", patientDao.findAll());
+        return "/prescription/patientEdit";
     }
 
     @PostMapping("/delete")
@@ -48,48 +39,32 @@ public class PatientController {
     public String edit(@RequestParam String id, Model model) {
         logger.debug("edit in");
         model.addAttribute("isEdit", true);
-        model.addAttribute("prescription", prescriptionDao.find(id));
-        model.addAttribute("patient", patientDao.findAll());
-        model.addAttribute("enteralNutrient", enteralNutrientDao.findAll());
+        model.addAttribute("patient", patientDao.find(id));
         return "/patient/edit";
     }
 
     @GetMapping("/new")
-    public String new_entry(Model model) throws ParseException {
+    public String new_entry(Model model) {
         logger.debug("new in");
         model.addAttribute("isEdit", false);
-        model.addAttribute("prescription", new PrescriptionInfo(-1,-1,"",-1,"","",
-                new SimpleDateFormat("MM/dd").parse(""),-1, new SimpleDateFormat("MM/dd").parse(""),-1,false));
-        model.addAttribute("patientList", patientDao.findAll());
+        model.addAttribute("patient", new PatientInfo(-1,"",""));
         return "/patient/edit";
     }
 
     @PostMapping("/register")
-    public String registry(@ModelAttribute PrescriptionEditForm form) {
-        logger.debug("registry in {}", form.id);
+    public String registry(@ModelAttribute PatientEditForm form) {
+        logger.debug("registry in {}", form.patientId);
         if (form.isEdit) {
-            prescriptionDao.update(new PrescriptionRecord(
-                    Integer.parseInt(form.id),
-                    form.patientId,
-                    form.enteralNutrientId,
-                    form.dosage,
-                    form.dt,
-                    form.days,
-                    form.deliveryDt,
-                    form.doneDays,
-                    form.done
+            patientDao.update(new PatientRecord(
+                    Integer.parseInt(form.patientId),
+                    form.patientName,
+                    form.patientBirthday
             ));
         } else {
-            prescriptionDao.insert(new PrescriptionRecord(
-                    Integer.parseInt(form.id),
-                    form.patientId,
-                    form.enteralNutrientId,
-                    form.dosage,
-                    form.dt,
-                    form.days,
-                    form.deliveryDt,
-                    form.doneDays,
-                    form.done
+            patientDao.insert(new PatientRecord(
+                    Integer.parseInt(form.patientId),
+                    form.patientName,
+                    form.patientBirthday
             ));
         }
         return "redirect:/patient/";

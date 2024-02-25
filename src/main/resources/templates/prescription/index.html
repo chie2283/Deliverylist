@@ -28,8 +28,8 @@
                     <th>✓</th>
                 </tr>
                 <tr th:each="prescription : ${prescriptionList}">
-                    <td th:text="${prescription.patientName}"></td>
-                    <td th:text="${prescription.enteralNutrientName}"></td>
+                    <td th:text="${patient.name}" th:selected="${patient.id == prescription.patientId}"></td>
+                    <td th:text="${enteralNutrient.name}" th:selected="${enteralNutrient.id == prescription.enteralNutrientId}"></td>
                     <td th:text="${prescription.dosage}"></td>
                     <td th:text="${prescription.dt}"></td>
                     <td th:text="${prescription.days}"></td>
@@ -40,13 +40,13 @@
                         <table>
                             <tr>
                                 <td>
-                                    <form action="/patient/edit" method="get">
+                                    <form action="/prescription/edit" method="get">
                                         <button type="submit" class="btn btn-primary">編集</button>
                                         <input type="hidden" name="id" th:value="${prescription.id}" />
                                     </form>
                                 </td>
                                 <td>
-                                    <form action="/patient/delete" method="post">
+                                    <form action="/prescription/delete" method="post">
                                         <button class="btn brn-primary">削除</button>
                                         <input type="hidden" name="id" th:value="${prescription.id}" />
                                     </form>
@@ -57,7 +57,7 @@
                 </tr>
                 </tbody>
             </table>
-            <form action="/patient/new" method="get">
+            <form action="/prescription/new" method="get">
                 <div class="d-flex justify-content-start">
                     <button type="submit" class="btn btn-primary">追加</button>
                 </div>

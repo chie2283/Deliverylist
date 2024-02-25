@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>配達先別患者リスト/登録</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container">
+            <form action="/prescription/register" method="post">
+                <div class="mb-3">
+                    <label for="destinationId" class="form-label">配達先</label>
+                    <select class="form-select" id="destinationId" name="destinationId">
+                        <option th:each="destination : ${destinationList}" th:value="${destination.id}" th:text="${destination.name}" th:selected="${destination.id == prescription.destinationId}"></option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="patientId" class="form-label">患者氏名</label>
+                    <select class="form-select" id="patientId" name="patientId">
+                        <option th:each="patient : ${patientList}" th:value="${patient.id}" th:text="${patient.name}" th:selected="${patient.id == prescription.patientId}"></option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="enteralNutrientId" class="form-label">栄養剤種類</label>
+                    <select class="form-select" id="enteralNutrientId" name="enteralNutrientId">
+                        <option th:each="enteralNutrient : ${enteralNutrientList}" th:value="${enteralNutrient.id}" th:text="${enteralNutrient.name}" th:selected="${enteralNutrient.id == prescription.enteralNutrientId}"></option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="dosage" class="form-label">用量</label>
+                    <input type="test" class="form-control" id="dosage" name="dosage" placeholder="用量を入力してください" th:value="${prescription.dosage}">
+                </div>
+                <div class="mb-3">
+                    <label for="dt" class="form-label">処方日</label>
+                    <input type="test" class="form-control" id="dt" name="dt" placeholder="処方日を入力してください" th:value="${prescription.dt}">
+                </div>
+                <div class="mb-3">
+                    <label for="days" class="form-label">処方日数</label>
+                    <input type="test" class="form-control" id="days" name="days" placeholder="処方日数を入力してください" th:value="${prescription.days}">
+                </div>
+                <div class="mb-3">
+                    <label for="deliveryDt" class="form-label">配達日</label>
+                    <input type="test" class="form-control" id="deliveryDt" name="deliveryDt" placeholder="配達日を入力してください" th:value="${prescription.deliveryDt}">
+                </div>
+                <div class="mb-3">
+                    <label for="doneDays" class="form-label">済日数</label>
+                    <input type="test" class="form-control" id="doneDays" name="doneDays" placeholder="済日数を入力してください" th:value="${prescription.doneDays}">
+                </div>
+                <div class="mb-3">
+                    <label for="done" class="form-label">✓</label>
+                    <select class="form-select" id="done" name="done">
+                        <option th:value="false">未</option>
+                        <option th:value="true">✓</option>
+                    </select>
+                </div>
+                <div class="mb-3 d-grid">
+                    <input type="hidden" name="prescriptionId" th:value="${prescription.id}" />
+                    <input type="hidden" name="isEdit" th:value="${isEdit}" />
+                    <button type="submit" class="btn btn-primary">登録</button>
+                </div>
+            </form>
+            <form action="/patient/new" method="get">
+                <div class="d-flex justify-content-start">
+                    <button type="submit" class="btn btn-primary">患者新規登録</button>
+                </div>
+            </form>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    </body>
+</html>

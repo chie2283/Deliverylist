@@ -17,6 +17,8 @@ public class PrescriptionDao {
 
     record PrescriptionInfo(
             Integer id,
+            Integer destinationId,
+            String destinationName,
             Integer patientId,
             String patientName,
             Integer enteralNutrientId,
@@ -31,6 +33,7 @@ public class PrescriptionDao {
 
     record PrescriptionRecord(
             Integer id,
+            String destinationId,
             String patientId,
             String enteralNutrientId,
             String dosage,
@@ -49,6 +52,8 @@ public class PrescriptionDao {
     List<PrescriptionInfo> findAll() {
         var query = """            
             SELECT rp.id AS id,
+                   d.id AS destination_id,
+                   d.name AS destination_name,
                    p.id AS patient_id,
                    p.name AS patient_name,
                    e.id AS enteralNutrient_id,
@@ -60,6 +65,7 @@ public class PrescriptionDao {
                    rp.doneDays AS doneDays,
                    rp.done AS done
             FROM prescription rp
+            LEFT JOIN destination d ON(rp.destination_id = d.id)
             LEFT JOIN patient p ON(rp.patient_id = p.id)
             LEFT JOIN enteralNutrient e ON(rp.enteralNutrient_id = e.id)
         """;
@@ -71,6 +77,8 @@ public class PrescriptionDao {
     PrescriptionInfo find(String id) {
         var query = """
             SELECT rp.id AS id,
+                   d.id AS destination_id,
+                   d.name AS destination_name,
                    p.id AS patient_id,
                    p.name AS patient_name,
                    e.id AS enteralNutrient_id,
@@ -82,6 +90,7 @@ public class PrescriptionDao {
                    rp.doneDays AS doneDays,
                    rp.done AS done
             FROM prescription rp
+            LEFT JOIN destination d ON(rp.destination_id = d.id)
             LEFT JOIN patient p ON(rp.patient_id = p.id)
             LEFT JOIN enteralNutrient e ON(rp.enteralNutrient_id = e.id)
             WHERE rp.id = ?
@@ -98,16 +107,16 @@ public class PrescriptionDao {
     }
 
     void update(PrescriptionRecord rec) {
-        int rows = jdbcTemplate.update("UPDATE prescription SET patient_id = ?, enteralNutrient_id = ?, dosage = ?, dt = ?, days = ?, deliveryDt = ?, doneDays = ?, done = ? WHERE id = ?",
-                rec.patientId, rec.enteralNutrientId, rec.dosage, rec.dt, rec.days, rec.deliveryDt, rec.doneDays, rec.done, rec.id);
+        int rows = jdbcTemplate.update("UPDATE prescription SET destination_id = ?, patient_id = ?, enteralNutrient_id = ?, dosage = ?, dt = ?, days = ?, deliveryDt = ?, doneDays = ?, done = ? WHERE id = ?",
+                rec.destinationId, rec.patientId, rec.enteralNutrientId, rec.dosage, rec.dt, rec.days, rec.deliveryDt, rec.doneDays, rec.done, rec.id);
         if (rows != 1) {
             throw new RuntimeException("更新処理で異常が発生しました");
         }
     }
 
     void insert(PrescriptionRecord rec) {
-        int rows = jdbcTemplate.update("INSERT INTO prescription (patient_id, enteralNutrient_id, dosage, dt, days, deliveryDt, doneDays, done) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
-                rec.patientId, rec.enteralNutrientId, rec.dosage, rec.dt, rec.days, rec.deliveryDt, rec.doneDays, rec.done);
+        int rows = jdbcTemplate.update("INSERT INTO prescription (destination_id, patient_id, enteralNutrient_id, dosage, dt, days, deliveryDt, doneDays, done) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                rec.destinationId, rec.patientId, rec.enteralNutrientId, rec.dosage, rec.dt, rec.days, rec.deliveryDt, rec.doneDays, rec.done);
         if (rows != 1) {
             throw new RuntimeException("更新処理で異常が発生しました");
         }

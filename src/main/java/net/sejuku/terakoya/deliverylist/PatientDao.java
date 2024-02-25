@@ -17,14 +17,13 @@ public class PatientDao {
     record PatientInfo(
             Integer id,
             String name,
-            Integer destinationId,
-            String destinationName
-            ) {}
+            String birthday
+    ) {}
 
     record PatientRecord(
             Integer id,
             String name,
-            String destinationId
+            String birthday
     ) {}
 
     @Autowired
@@ -32,53 +31,49 @@ public class PatientDao {
         this.jdbcTemplate = template;
     }
 
-    List<PatientInfo> findAll() {
+    List<PatientDao.PatientInfo> findAll() {
         var query = """
-            SELECT p.id AS id,
-                   p.name AS name,
-                   d.id AS destination_id,
-                   d.name AS destination_name
-            FROM patient p
-            LEFT JOIN destination d ON(p.destination_id = d.id)
-        """;
+         SELECT p.id,
+                p.name,
+                p.birthday
+          FROM patient p
+      """;
         logger.debug(query);
-        List<PatientInfo> results = jdbcTemplate.query(query, new DataClassRowMapper<>(PatientInfo.class));
+        List<PatientDao.PatientInfo> results = jdbcTemplate.query(query, new DataClassRowMapper<>(PatientDao.PatientInfo.class));
         return results;
     }
 
-    PatientInfo find(String id) {
+    PatientDao.PatientInfo find(String id) {
         var query = """
-            SELECT p.id AS id,
-                   p.name AS name,
-                   d.id AS destination_id,
-                   d.name AS destination_name
-            FROM patient p
-            LEFT JOIN destination d ON(p.destination_id = d.id)
-            WHERE p.id = ?
-        """;
-        List<PatientInfo> result = jdbcTemplate.query(query, new DataClassRowMapper<>(PatientInfo.class), Integer.valueOf(id));
+         SELECT p.id,
+                p.name,
+                p.birthday
+          FROM patient p
+          WHERE p.id = ?
+      """;
+        List<PatientDao.PatientInfo> result = jdbcTemplate.query(query, new DataClassRowMapper<>(PatientDao.PatientInfo.class), Integer.valueOf(id));
         return result.get(0);
     }
 
     void delete(String id) {
         int rows = jdbcTemplate.update("DELETE FROM patient WHERE id = ?", Integer.valueOf(id));
-        if (rows != 1) {
+        if (rows !=1) {
             throw new RuntimeException("削除処理で異常が発生しました");
         }
     }
 
-    void update(PatientRecord rec) {
-        int rows = jdbcTemplate.update("UPDATE patient SET name = ?, destination_id = ?, WHERE id = ?",
-                rec.name, rec.destinationId, rec.id);
+    void update(PatientDao.PatientRecord rec) {
+        int rows = jdbcTemplate.update("UPDATE patient SET name = ?, birthday = ?, WHERE id = ?",
+                rec.name, rec.birthday, rec.id);
         if (rows != 1) {
             throw new RuntimeException("更新処理で異常が発生しました");
         }
     }
 
-    void insert(PatientRecord rec) {
-        int rows = jdbcTemplate.update("INSERT INTO patient (name, destination_id) VALUES(?, ?)",
-                rec.name, rec.destinationId);
-        if (rows != 1) {
+    void insert(PatientDao.PatientRecord rec) {
+        int rows = jdbcTemplate.update("INSERT INTO patient (name, birthday) VALUES(?, ?)",
+                rec.name, rec.birthday);
+        if (rows !=1) {
             throw new RuntimeException("更新処理で異常が発生しました");
         }
     }
