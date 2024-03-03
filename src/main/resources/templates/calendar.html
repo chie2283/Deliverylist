@@ -15,17 +15,25 @@
                 </select>
             </label>
         </div>
-        <div class="calendar">
-            <thead>
-            <tr>
-                <th scope="col"  th:text="${calendarDay}"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="patient : ${patientList}">
-                <th scope="row" th:text="${patient.name}"></th>
-            </tr>
-            </tbody>
+        <div class="container">
+            <table class="calendar">
+                <thead>
+                    <tr>
+                        <th></th><th scope="col" th:text="${calendarYearMonth}"></th>
+                    </tr>
+                    <tr>
+                        <th></th><th scope="col" th:text="${calendarDate}"></th>
+                    </tr>
+                    <tr>
+                        <th></th><th scope="col" th:text="${calendarWeek}"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="patient : ${patientList}">
+                        <td scope="row" th:text="${patient.name}"></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </body>
 </html>

@@ -2,14 +2,16 @@ package net.sejuku.terakoya.deliverylist;
 
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.Year;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 
 @Service
 public class CalendarDay {
-
-    public int[] calendar;
     private Year year;
     LocalDate ld;
 
@@ -33,43 +35,48 @@ public class CalendarDay {
         return this.ld;
     }
 
-    private int getMonthLength() {
-        Month thisMonth = Month.from(getLd());
-        return thisMonth.length(this.ld.isLeapYear());
-    }
-
-    private int getFirstDay() {
-        return getLd().getDayOfWeek().getValue() - 1;
-    }
-
-    public void calcFields() {
-        int column = getFirstDay();
-
-        for(int date = 1; date <= getMonthLength(); date++) {
-            this.calendar[column] = date;
-        }
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        final String FORMAT = "%3d";
-
-        for (int n = 1; n <= 12; n++) {
-            this.calendar = new int[1];
+    public String yearMonth() {
+        for(int n = 1 ; n <= 12; n++) {
             this.setLd(n);
-
-            calcFields();
-            sb.append(getYear() + "年" + n + "月");
-            sb.append("\r\n");
-
-            for (int i = 0; i < calendar.length; i++) {
-                int date = calendar[i];
-                sb.append(String.format(FORMAT,date));
-            }
         }
-        sb.append("\r\n");
-        sb.append(getFirstDay());
-        return sb.toString();
+        return YearMonth.now().format(DateTimeFormatter.ofPattern("yyyy/MM"));
+    }
+    public ArrayList<Integer> date() {
+        var date = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+        var dayList = new ArrayList<Integer>();
+        for(int i = 1; i <= date.getDayOfMonth(); i++) {
+            dayList.add(i);
+        }
+        return dayList;
+    }
+
+
+    public ArrayList<String> week() {
+        var week = getLd().getDayOfWeek();
+        var e = new ArrayList<DayOfWeek>();
+        e.add(DayOfWeek.MONDAY);
+        e.add(DayOfWeek.TUESDAY);
+        e.add(DayOfWeek.WEDNESDAY);
+        e.add(DayOfWeek.THURSDAY);
+        e.add(DayOfWeek.FRIDAY);
+        e.add(DayOfWeek.SATURDAY);
+        e.add(DayOfWeek.SUNDAY);
+
+        var list = new ArrayList<String>();
+        list.add("月");
+        list.add("火");
+        list.add("水");
+        list.add("木");
+        list.add("金");
+        list.add("土");
+        list.add("日");
+
+        String str = list.get(e.indexOf(week));
+
+        var weekList = new ArrayList<String>();
+        for(int date = 1; date <= getLd().getDayOfMonth(); date++ ) {
+            weekList.add(str);
+        }
+        return weekList;
     }
 }

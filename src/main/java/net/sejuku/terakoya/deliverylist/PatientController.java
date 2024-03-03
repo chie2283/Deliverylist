@@ -14,7 +14,7 @@ import static net.sejuku.terakoya.deliverylist.PatientDao.*;
 public class PatientController {
     Logger logger = LoggerFactory.getLogger(PatientController.class);
     private PatientDao patientDao;
-    record PatientEditForm(String patientId, String patientName, String patientBirthday, Boolean isEdit) {}
+    record PatientEditForm(String patientId, String patientName, String patientBirthday, Boolean isEdit, String returnPath) {}
 
     @Autowired
     PatientController(PatientDao patientDao) {
@@ -24,7 +24,7 @@ public class PatientController {
     @GetMapping("/")
     public String index(Model model) {
         logger.debug("index in");
-        model.addAttribute("patient", patientDao.findAll());
+        model.addAttribute("patientList", patientDao.findAll());
         return "/prescription/patientEdit";
     }
 
@@ -32,7 +32,7 @@ public class PatientController {
     public String delete(@RequestParam String id) {
         logger.info("delete id is {}", id);
         patientDao.delete(id);
-        return "redirect:/patient/";
+        return "redirect:/prescription/new";
     }
 
     @GetMapping("/edit")
@@ -44,11 +44,12 @@ public class PatientController {
     }
 
     @GetMapping("/new")
-    public String new_entry(Model model) {
-        logger.debug("new in");
+    public String new_entry(@RequestParam String returnPath, Model model) {
+        logger.debug("new in {}", returnPath);
         model.addAttribute("isEdit", false);
         model.addAttribute("patient", new PatientInfo(-1,"",""));
-        return "/patient/edit";
+        model.addAttribute("returnPath", returnPath);
+        return "/prescription/patientEdit";
     }
 
     @PostMapping("/register")
@@ -67,6 +68,6 @@ public class PatientController {
                     form.patientBirthday
             ));
         }
-        return "redirect:/patient/";
+        return "redirect:" + form.returnPath();
     }
 }
