@@ -27,8 +27,8 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="dosage" class="form-label">用量</label>
-                    <input type="test" class="form-control" id="dosage" name="dosage" placeholder="用量を入力してください" th:value="${prescription.dosage}">
+                    <label for="dosage" class="form-label">1日用量</label>
+                    <input type="test" class="form-control" id="dosage" name="dosage" placeholder="1日用量を入力してください" th:value="${prescription.dosage}">
                 </div>
                 <div class="mb-3">
                     <label for="dt" class="form-label">処方日</label>
@@ -37,6 +37,10 @@
                 <div class="mb-3">
                     <label for="days" class="form-label">処方日数</label>
                     <input type="test" class="form-control" id="days" name="days" placeholder="処方日数を入力してください" th:value="${prescription.days}">
+                </div>
+                <div class="mb-3">
+                    <label for="start" class="form-label">使用開始日</label>
+                    <input type="test" class="form-control" id="start" name="start" placeholder="使用開始日を入力してください" th:value="${prescription.start}">
                 </div>
                 <div class="mb-3">
                     <label for="deliveryDt" class="form-label">配達日</label>

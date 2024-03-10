@@ -3,13 +3,15 @@ package net.sejuku.terakoya.deliverylist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-import static net.sejuku.terakoya.deliverylist.PrescriptionDao.*;
+import static net.sejuku.terakoya.deliverylist.PrescriptionDao.PrescriptionInfo;
+import static net.sejuku.terakoya.deliverylist.PrescriptionDao.PrescriptionRecord;
 @Controller
 @RequestMapping(value = "/prescription")
 public class PrescriptionController {
@@ -19,8 +21,21 @@ public class PrescriptionController {
     private PatientDao patientDao;
 
     private EnteralNutrientDao enteralNutrientDao;
-    record PrescriptionEditForm(String id, String destinationId, String patientId, String enteralNutrientId,
-                                String dosage, Date dt, Integer days, Date deliveryDt, Integer doneDays, Boolean done, Boolean isEdit) {}
+    record PrescriptionEditForm(String id,
+                                String destinationId,
+                                String patientId,
+                                String enteralNutrientId,
+                                String dosage,
+                                @DateTimeFormat(pattern = "yyyy-mm-dd")
+                                LocalDate dt,
+                                Integer days,
+                                @DateTimeFormat(pattern = "yyyy-mm-dd")
+                                LocalDate start,
+                                @DateTimeFormat(pattern = "yyyy-mm-dd")
+                                LocalDate deliveryDt,
+                                Integer doneDays,
+                                Boolean done,
+                                Boolean isEdit) {}
 
     @Autowired
     PrescriptionController(PrescriptionDao prescriptionDao, DestinationDao destinationDao, PatientDao patientDao, EnteralNutrientDao enteralNutrientDao) {
@@ -61,7 +76,7 @@ public class PrescriptionController {
         logger.debug("new in");
         model.addAttribute("isEdit", false);
         model.addAttribute("prescription", new PrescriptionInfo(-1,0,"",0,"",0,
-                "","", null,14,null,14,false));
+                "","", null,14,null,null,14,false));
         model.addAttribute("destinationList", destinationDao.findAll());
         model.addAttribute("patientList", patientDao.findAll());
         model.addAttribute("enteralNutrientList", enteralNutrientDao.findAll());
@@ -80,19 +95,21 @@ public class PrescriptionController {
                     form.dosage,
                     form.dt,
                     form.days,
+                    form.start,
                     form.deliveryDt,
                     form.doneDays,
                     form.done
             ));
         } else {
             prescriptionDao.insert(new PrescriptionRecord(
-                    Integer.parseInt(form.id),
+                    -1,
                     form.destinationId,
                     form.patientId,
                     form.enteralNutrientId,
                     form.dosage,
                     form.dt,
                     form.days,
+                    form.start,
                     form.deliveryDt,
                     form.doneDays,
                     form.done

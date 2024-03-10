@@ -20,19 +20,21 @@
                 <tr>
                     <th>名前</th>
                     <th>種類</th>
-                    <th>用量</th>
+                    <th>1日用量</th>
                     <th>処方日</th>
                     <th>処方日数</th>
+                    <th>使用開始日</th>
                     <th>配達日</th>
                     <th>済日数</th>
                     <th>✓</th>
                 </tr>
                 <tr th:each="prescription : ${prescriptionList}">
-                    <td th:text="${patient.name}" th:selected="${patient.id == prescription.patientId}"></td>
-                    <td th:text="${enteralNutrient.name}" th:selected="${enteralNutrient.id == prescription.enteralNutrientId}"></td>
+                    <td th:text="${prescription.patientName}"></td>
+                    <td th:text="${prescription.enteralNutrientName}"></td>
                     <td th:text="${prescription.dosage}"></td>
                     <td th:text="${prescription.dt}"></td>
                     <td th:text="${prescription.days}"></td>
+                    <td th:text="${prescription.start}"></td>
                     <td th:text="${prescription.deliveryDt}"></td>
                     <td th:text="${prescription.doneDays}"></td>
                     <td th:text="${prescription.done} ? '✓':'未'"></td>

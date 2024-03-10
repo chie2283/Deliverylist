@@ -32,8 +32,7 @@ public class CalendarController {
         model.addAttribute("prescriptionList", prescriptionDao.findAll());
         model.addAttribute("patientList", patientDao.findAll());
         model.addAttribute("calendarYearMonth", calendarDay.yearMonth());
-        model.addAttribute("calendarDate", calendarDay.date());
-        model.addAttribute("calendarWeek", calendarDay.week());
+        model.addAttribute("days", calendarDay.list());
         return "/calendar";
     }
 }

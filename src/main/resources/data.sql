@@ -1,8 +1,3 @@
-INSERT INTO enteralNutrient(name) VALUES('ラコール半固形');
-INSERT INTO enteralNutrient(name) VALUES('ラコール400');
-INSERT INTO enteralNutrient(name) VALUES('ラコール200');
-INSERT INTO enteralNutrient(name) VALUES('ツインライン');
-INSERT INTO enteralNutrient(name) VALUES('エンシュア・H');
-INSERT INTO enteralNutrient(name) VALUES('エンシュア・リキッド');
-INSERT INTO enteralNutrient(name) VALUES('エネーボ');
-INSERT INTO enteralNutrient(name) VALUES('イノラス');
+INSERT INTO enteral_nutrient(name)
+    VALUES('ラコール半固形'),('ラコール400'),('ラコール200'),('ツインライン'),
+    ('エンシュア・H'),('エンシュア・リキッド'),('エネーボ'),('イノラス');

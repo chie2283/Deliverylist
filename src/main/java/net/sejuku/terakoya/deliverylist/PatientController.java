@@ -32,7 +32,7 @@ public class PatientController {
     public String delete(@RequestParam String id) {
         logger.info("delete id is {}", id);
         patientDao.delete(id);
-        return "redirect:/prescription/new";
+        return "redirect:/patient/new";
     }
 
     @GetMapping("/edit")
@@ -49,7 +49,7 @@ public class PatientController {
         model.addAttribute("isEdit", false);
         model.addAttribute("patient", new PatientInfo(-1,"",""));
         model.addAttribute("returnPath", returnPath);
-        return "/prescription/patientEdit";
+        return "/patient/edit";
     }
 
     @PostMapping("/register")
@@ -68,6 +68,6 @@ public class PatientController {
                     form.patientBirthday
             ));
         }
-        return "redirect:" + form.returnPath();
+        return "redirect:/" + form.returnPath();
     }
 }

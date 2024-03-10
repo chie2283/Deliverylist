@@ -24,7 +24,7 @@ public class EnteralNutrientDao {
     }
 
     public  List<EnteralNutrientInfo> findAll() {
-        var query = "SELECT * FROM enteralNutrient";
+        var query = "SELECT * FROM enteral_nutrient";
         List<EnteralNutrientInfo> results = jdbcTemplate.query(query, new DataClassRowMapper<>(EnteralNutrientInfo.class));
         return  results;
     }
