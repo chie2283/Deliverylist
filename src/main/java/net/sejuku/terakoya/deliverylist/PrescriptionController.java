@@ -30,7 +30,7 @@ public class PrescriptionController {
                                 LocalDate dt,
                                 Integer days,
                                 @DateTimeFormat(pattern = "yyyy-mm-dd")
-                                LocalDate start,
+                                LocalDate startDate,
                                 @DateTimeFormat(pattern = "yyyy-mm-dd")
                                 LocalDate deliveryDt,
                                 Integer doneDays,
@@ -76,7 +76,7 @@ public class PrescriptionController {
         logger.debug("new in");
         model.addAttribute("isEdit", false);
         model.addAttribute("prescription", new PrescriptionInfo(-1,0,"",0,"",0,
-                "","", null,14,null,null,14,false));
+                "","", null,14,null,null,null,0,false));
         model.addAttribute("destinationList", destinationDao.findAll());
         model.addAttribute("patientList", patientDao.findAll());
         model.addAttribute("enteralNutrientList", enteralNutrientDao.findAll());
@@ -95,7 +95,8 @@ public class PrescriptionController {
                     form.dosage,
                     form.dt,
                     form.days,
-                    form.start,
+                    form.startDate,
+                    form.startDate.plusDays(form.days),
                     form.deliveryDt,
                     form.doneDays,
                     form.done
@@ -109,7 +110,8 @@ public class PrescriptionController {
                     form.dosage,
                     form.dt,
                     form.days,
-                    form.start,
+                    form.startDate,
+                    form.startDate.plusDays(form.days),
                     form.deliveryDt,
                     form.doneDays,
                     form.done

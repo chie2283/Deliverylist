@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS prescription;
 DROP TABLE IF EXISTS enteral_nutrient;
-DROP TABLE IF EXISTS patient;
-DROP TABLE IF EXISTS destination;
+--DROP TABLE IF EXISTS patient;
+--DROP TABLE IF EXISTS destination;
 
 CREATE TABLE IF NOT EXISTS destination (
     id INT DEFAULT 0 NOT NULL AUTO_INCREMENT,
@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS prescription (
     dosage VARCHAR(128),
     dt DATE,
     days INT,
-    start DATE,
+    start_date DATE,
+    end_date DATE,
     delivery_dt DATE,
     done_days INT,
     done BOOLEAN,

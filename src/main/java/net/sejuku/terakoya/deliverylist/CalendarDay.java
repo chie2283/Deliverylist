@@ -1,10 +1,11 @@
 package net.sejuku.terakoya.deliverylist;
 
+import net.sejuku.terakoya.deliverylist.PrescriptionDao.PrescriptionInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Year;
-import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ public class CalendarDay {
     private Year year;
     LocalDate ld;
     record Days(List<Integer> dateList, List<String> weekList) {};
+    @Autowired
+    private PrescriptionDao prescriptionDao;
 
     public CalendarDay() {
         this.setYear();
@@ -40,13 +43,17 @@ public class CalendarDay {
         for(int n = 1 ; n <= 12; n++) {
             this.setLd(n);
         }
-        return YearMonth.now().format(DateTimeFormatter.ofPattern("yyyy/MM"));
+        return yearMonth(LocalDate.now());
     }
 
-    public  ArrayList<Integer> date() {
-        return date(LocalDate.now());
+    public String yearMonth(LocalDate src) {
+        return src.format(DateTimeFormatter.ofPattern("yyyy/MM"));
     }
-    public ArrayList<Integer> date(LocalDate src) {
+
+    public  ArrayList<Integer> getDaysList() {
+        return getDaysList(LocalDate.now());
+    }
+    public ArrayList<Integer> getDaysList(LocalDate src) {
         var date = src.with(TemporalAdjusters.lastDayOfMonth());
         var dayList = new ArrayList<Integer>();
         for(int i = 1; i <= date.getDayOfMonth(); i++) {
@@ -55,10 +62,10 @@ public class CalendarDay {
         return dayList;
     }
 
-    public ArrayList<String> week() {
-        return week(LocalDate.now());
+    public ArrayList<String> getWeekList() {
+        return getWeekList(LocalDate.now());
     }
-    public ArrayList<String> week(LocalDate src) {
+    public ArrayList<String> getWeekList(LocalDate src) {
         var date = src.with(TemporalAdjusters.lastDayOfMonth());
         var weekList = new ArrayList<String>();
         for(int i = 1; i <= date.getDayOfMonth(); i++ ) {
@@ -77,11 +84,34 @@ public class CalendarDay {
         return weekList;
     }
 
-    public ArrayList<Days> list(){
+    public ArrayList<String> ymList() {
+        var ymList = new ArrayList<String>();
+        ymList.add(yearMonth());
+        ymList.add(yearMonth(LocalDate.now().plusMonths(1)));
+        ymList.add(yearMonth(LocalDate.now().plusMonths(2)));
+        return ymList;
+    }
+
+    public ArrayList<Days> list() {
         var list = new ArrayList<Days>();
-        list.add(new Days(date(), week()));
-        list.add(new Days(date(LocalDate.now().plusMonths(1)), week(LocalDate.now().plusMonths(1))));
-        list.add(new Days(date(LocalDate.now().plusMonths(2)), week(LocalDate.now().plusMonths(2))));
+        list.add(new Days(getDaysList(), getWeekList()));
+        list.add(new Days(getDaysList(LocalDate.now().plusMonths(1)), getWeekList(LocalDate.now().plusMonths(1))));
+        list.add(new Days(getDaysList(LocalDate.now().plusMonths(2)), getWeekList(LocalDate.now().plusMonths(2))));
         return list;
+    }
+
+    public ArrayList<List<Integer>> colorDays(LocalDate firstDay, LocalDate lastDay) {
+        List<PrescriptionInfo> days = prescriptionDao.findDays();
+        var colorDay = new ArrayList<Integer>();
+        var colorDays = new ArrayList<List<Integer>>();
+        for(int i = 0; i <= days.size(); i++) {
+            LocalDate startDate = days.get(i).startDate();
+            LocalDate endDate = days.get(i).endDate();
+            if(startDate.isAfter(firstDay) && endDate.isBefore(lastDay)){
+                 colorDay.add(days.get(i).days());
+            }
+        }
+        colorDays.add(colorDay);
+        return colorDays;
     }
 }

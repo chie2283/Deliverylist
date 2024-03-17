@@ -20,6 +20,10 @@
                 <thead>
                     <tr>
                         <th></th>
+                        <th class="align-middle" scope="col" th:each="yearMonth : ${YearMonth}" th:text="${yearMonth}" colspan="31"></th>
+                    </tr>
+                    <tr>
+                        <th></th>
                         <div th:each="list : ${days}">
                             <th scope="col" th:each="date : ${list.dateList}" th:text="${date}"></th>
                         </div>
@@ -33,8 +37,10 @@
                 </thead>
                 <tbody>
                 <tr th:each="patient : ${patientList}">
-                    <td scope="row" th:text="${patient.name}"></td>
-                    <td></td>
+                    <th scope="row" th:text="${patient.name}"></th>
+                    <div th:each="color : ${color}">
+                        <td class="table-primary" colspan="${color.days}"></td>
+                    </div>
                 </tr>
                 </tbody>
             </table>
