@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS prescription;
-DROP TABLE IF EXISTS enteral_nutrient;
+--DROP TABLE IF EXISTS prescription;
+--DROP TABLE IF EXISTS enteral_nutrient;
 --DROP TABLE IF EXISTS patient;
 --DROP TABLE IF EXISTS destination;
 

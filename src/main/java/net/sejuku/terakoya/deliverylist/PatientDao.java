@@ -31,7 +31,7 @@ public class PatientDao {
         this.jdbcTemplate = template;
     }
 
-    List<PatientDao.PatientInfo> findAll() {
+    List<PatientInfo> findAll() {
         var query = """
          SELECT p.id,
                 p.name,
@@ -43,7 +43,7 @@ public class PatientDao {
         return results;
     }
 
-    PatientDao.PatientInfo find(String id) {
+    PatientInfo find(String id) {
         var query = """
          SELECT p.id,
                 p.name,
@@ -51,7 +51,7 @@ public class PatientDao {
           FROM patient p
           WHERE p.id = ?
       """;
-        List<PatientDao.PatientInfo> result = jdbcTemplate.query(query, new DataClassRowMapper<>(PatientDao.PatientInfo.class), Integer.valueOf(id));
+        List<PatientInfo> result = jdbcTemplate.query(query, new DataClassRowMapper<>(PatientDao.PatientInfo.class), Integer.valueOf(id));
         return result.get(0);
     }
 

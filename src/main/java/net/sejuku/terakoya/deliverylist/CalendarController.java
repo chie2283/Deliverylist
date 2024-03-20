@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 
 @Controller
@@ -33,12 +34,13 @@ public class CalendarController {
         logger.debug("index in");
         model.addAttribute("destinationList", destinationDao.findAll());
         model.addAttribute("prescriptionList", prescriptionDao.findAll());
-        model.addAttribute("patientList", patientDao.findAll());
-        model.addAttribute("YearMonth", calendarDay.ymList());
+        model.addAttribute("patientList", calendarDay.patientList());
+        model.addAttribute("yearMonth", calendarDay.ymList());
         model.addAttribute("days", calendarDay.list());
-        var firstDay = LocalDate.parse(calendarDay.yearMonth());
+        var firstDay = LocalDate.parse(calendarDay.yearMonth() + "/01", DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         var lastDay = LocalDate.now().plusMonths(3).with(TemporalAdjusters.lastDayOfMonth());
-        model.addAttribute("color", calendarDay.colorDays(firstDay,lastDay));
+        model.addAttribute("rpColor", calendarDay.rpColor(firstDay, lastDay));
+        model.addAttribute("doneColor", calendarDay.doneColor(firstDay));
         return "/calendar";
     }
 }
