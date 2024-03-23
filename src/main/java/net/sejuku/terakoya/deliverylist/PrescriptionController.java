@@ -3,7 +3,6 @@ package net.sejuku.terakoya.deliverylist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,12 +25,9 @@ public class PrescriptionController {
                                 String patientId,
                                 String enteralNutrientId,
                                 String dosage,
-                                @DateTimeFormat(pattern = "yyyy-mm-dd")
                                 LocalDate dt,
                                 Integer days,
-                                @DateTimeFormat(pattern = "yyyy-mm-dd")
                                 LocalDate startDate,
-                                @DateTimeFormat(pattern = "yyyy-mm-dd")
                                 LocalDate deliveryDt,
                                 Integer doneDays,
                                 Boolean done,

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 import static net.sejuku.terakoya.deliverylist.PatientDao.*;
 
 @Controller
@@ -14,7 +16,7 @@ import static net.sejuku.terakoya.deliverylist.PatientDao.*;
 public class PatientController {
     Logger logger = LoggerFactory.getLogger(PatientController.class);
     private PatientDao patientDao;
-    record PatientEditForm(String patientId, String patientName, String patientBirthday, Boolean isEdit, String returnPath) {}
+    record PatientEditForm(String patientId, String patientName, LocalDate patientBirthday, Boolean isEdit, String returnPath) {}
 
     @Autowired
     PatientController(PatientDao patientDao) {
@@ -47,7 +49,7 @@ public class PatientController {
     public String new_entry(@RequestParam String returnPath, Model model) {
         logger.debug("new in {}", returnPath);
         model.addAttribute("isEdit", false);
-        model.addAttribute("patient", new PatientInfo(-1,"",""));
+        model.addAttribute("patient", new PatientInfo(-1,"",null));
         model.addAttribute("returnPath", returnPath);
         return "/patient/edit";
     }

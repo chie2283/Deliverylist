@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -17,13 +18,13 @@ public class PatientDao {
     record PatientInfo(
             Integer id,
             String name,
-            String birthday
+            LocalDate birthday
     ) {}
 
     record PatientRecord(
             Integer id,
             String name,
-            String birthday
+            LocalDate birthday
     ) {}
 
     @Autowired

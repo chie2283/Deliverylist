@@ -1,12 +1,10 @@
 package net.sejuku.terakoya.deliverylist;
 
 import net.sejuku.terakoya.deliverylist.PrescriptionDao.PrescriptionInfo;
-import net.sejuku.terakoya.deliverylist.PatientDao.PatientInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
@@ -18,11 +16,10 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
 public class CalendarDay {
-    private Year year;
-    LocalDate ld;
     record Days(List<Integer> dateList, List<String> weekList) {};
-    record RpDays(String rpDays, Integer day) {};
+    record RpDays(String rp, Integer day) {};
     record Done(String done, Integer day) {};
+    record Schedule(String patientName, List<RpDays> rp, List<Done> done) {}
     private PrescriptionDao prescriptionDao;
     private PatientDao patientDao;
 
@@ -96,55 +93,40 @@ public class CalendarDay {
         return grpByPatient;
     }
 
-    public ArrayList<PatientInfo> patientList() {
-        var patientList = new ArrayList<PatientInfo>();
+    public List<List<Schedule>> getSchedule(LocalDate firstDay, LocalDate lastDay) {
+        var getSchedule = new ArrayList<List<Schedule>>();
         for(Map.Entry<Integer, List<PrescriptionInfo>> element : grpByPatient().entrySet()) {
-                String id = String.valueOf(element.getKey());
-                patientList.add(this.patientDao.find(id));
-        }
-        return patientList;
-    }
-
-    public ArrayList<List<RpDays>> rpColor(LocalDate firstDay, LocalDate lastDay) {
-        var rpColorDay = new ArrayList<RpDays>();
-        var rpColorDays = new ArrayList<List<RpDays>>();
-
-        for(Map.Entry<Integer, List<PrescriptionInfo>> element : grpByPatient().entrySet()) {
+            String id = String.valueOf(element.getKey());
+            String patientName = this.patientDao.find(id).name();
+            var scheduleList = new ArrayList<Schedule>();
+            var rpColorDay = new ArrayList<RpDays>();
+            var doneColorDay = new ArrayList<Done>();
             for(PrescriptionInfo elementValue : element.getValue()) {
                 LocalDate startDate = elementValue.startDate();
                 LocalDate endDate = elementValue.endDate();
-                if (startDate.isAfter(firstDay) && endDate.isBefore(lastDay)){
-                    long daysBetween = DAYS.between(firstDay, startDate);
-                    rpColorDay.add(new RpDays("余白", (int)daysBetween));
+                if (startDate.isAfter(firstDay) && endDate.isBefore(lastDay)) {
+                    if (rpColorDay.isEmpty() && doneColorDay.isEmpty()) {
+                        long daysBetween = DAYS.between(firstDay, startDate);
+                        rpColorDay.add(new RpDays("余白", (int) daysBetween));
+                        doneColorDay.add(new Done("余白", (int) daysBetween));
+                    }
                     rpColorDay.add(new RpDays("処方", elementValue.days()));
-                }else if(startDate.isBefore(firstDay) && endDate.isAfter(firstDay)){
+                    if (elementValue.done()) {
+                        doneColorDay.add(new Done("配達済", elementValue.doneDays()));
+                    }
+                } else if (startDate.isBefore(firstDay) && endDate.isAfter(firstDay) && endDate.isBefore(lastDay)) {
                     long daysBetween = DAYS.between(startDate, firstDay);
-                    rpColorDay.add(new RpDays("処方", elementValue.days() - (int)daysBetween));
+                    rpColorDay.add(new RpDays("処方", elementValue.days() - (int) daysBetween));
+                    if (elementValue.done()) {
+                        doneColorDay.add(new Done("配達済", elementValue.doneDays() - (int) daysBetween));
+                    } else {
+                        doneColorDay.add(new Done("余白", elementValue.doneDays() - (int) daysBetween));
+                    }
                 }
-                rpColorDays.add(rpColorDay);
             }
+            scheduleList.add(new Schedule(patientName, rpColorDay, doneColorDay));
+            getSchedule.add(scheduleList);
         }
-        return rpColorDays;
-    }
-
-    public ArrayList<List<Done>> doneColor(LocalDate firstDay) {
-        var doneColorDay = new ArrayList<Done>();
-        var doneColorDays = new ArrayList<List<Done>>();
-
-        for(Map.Entry<Integer, List<PrescriptionInfo>> element : grpByPatient().entrySet()) {
-            for(PrescriptionInfo elementValue : element.getValue()) {
-                LocalDate startDate = elementValue.startDate();
-                if (startDate.isAfter(firstDay)){
-                    long daysBetween = DAYS.between(firstDay, startDate);
-                    doneColorDay.add(new Done("余白", (int)daysBetween));
-                    doneColorDay.add(new Done("配達済", elementValue.doneDays()));
-                }else if(startDate.isBefore(firstDay)){
-                    long daysBetween = DAYS.between(startDate, firstDay);
-                    doneColorDay.add(new Done("配達済", elementValue.doneDays() - (int)daysBetween));
-                }
-                doneColorDays.add(doneColorDay);
-            }
-        }
-        return doneColorDays;
+        return getSchedule;
     }
 }

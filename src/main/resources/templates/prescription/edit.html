@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <title>配達先別患者リスト/登録</title>
@@ -28,33 +28,33 @@
                 </div>
                 <div class="mb-3">
                     <label for="dosage" class="form-label">1日用量</label>
-                    <input type="test" class="form-control" id="dosage" name="dosage" placeholder="1日用量を入力してください" th:value="${prescription.dosage}">
+                    <input type="text" class="form-control" id="dosage" name="dosage" maxlength="128" placeholder="1日用量を入力してください" th:value="${prescription.dosage}" required />
                 </div>
                 <div class="mb-3">
                     <label for="dt" class="form-label">処方日</label>
-                    <input type="test" class="form-control" id="dt" name="dt" placeholder="処方日を入力してください" th:value="${prescription.dt}">
+                    <input type="date" class="form-control" id="dt" name="dt" th:value="${prescription.dt}" required />
                 </div>
                 <div class="mb-3">
                     <label for="days" class="form-label">処方日数</label>
-                    <input type="test" class="form-control" id="days" name="days" placeholder="処方日数を入力してください" th:value="${prescription.days}">
+                    <input type="number" class="form-control" id="days" name="days" min="1" max="90" th:value="${prescription.days}" required />
                 </div>
                 <div class="mb-3">
                     <label for="startDate" class="form-label">使用開始日</label>
-                    <input type="test" class="form-control" id="startDate" name="startDate" placeholder="使用開始日を入力してください" th:value="${prescription.startDate}">
+                    <input type="date" class="form-control" id="startDate" name="startDate" placeholder="使用開始日を入力してください" th:value="${prescription.startDate}" required />
                 </div>
                 <div class="mb-3">
-                    <label for="deliveryDt" class="form-label">配達日</label>
-                    <input type="test" class="form-control" id="deliveryDt" name="deliveryDt" placeholder="配達日を入力してください" th:value="${prescription.deliveryDt}">
+                    <label for="deliveryDt" class="form-label">配達予定日</label>
+                    <input type="date" class="form-control" id="deliveryDt" name="deliveryDt" placeholder="配達日を入力してください" th:value="${prescription.deliveryDt}" />
                 </div>
                 <div class="mb-3">
-                    <label for="doneDays" class="form-label">済日数</label>
-                    <input type="test" class="form-control" id="doneDays" name="doneDays" placeholder="済日数を入力してください" th:value="${prescription.doneDays}">
+                    <label for="doneDays" class="form-label">配達予定日数</label>
+                    <input type="number" class="form-control" id="doneDays" name="doneDays" min="1" max="90" th:value="${prescription.doneDays}" />
                 </div>
                 <div class="mb-3">
                     <label for="done" class="form-label">✓</label>
                     <select class="form-select" id="done" name="done">
                         <option th:value="false">未</option>
-                        <option th:value="true">✓</option>
+                        <option th:value="true">済</option>
                     </select>
                 </div>
                 <div class="mb-3 d-grid">
@@ -71,5 +71,6 @@
             </form>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+        <script type="text/javascript" th:src="@{script.js}"></script>
     </body>
 </html>

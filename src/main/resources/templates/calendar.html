@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <title>カレンダー</title>
@@ -36,24 +36,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                <div th:each="patient : ${patientList}">
-                    <tr>
-                        <th rowspan="2" scope="row" th:value="${patient.id}" th:text="${patient.name}"></th>
-                        <div th:each="rpList : ${rpColor}">
-                            <div th:each="rp : ${rpList}">
-                                <td th:colspan="${rp.day}" th:if="${rp.rpDays == '余白'}"></td>
-                                <td class="table-primary" th:colspan="${rp.day}"  th:if="${rp.rpDays == '処方'}"></td>
+                <div th:each="schedule : ${schedules}">
+                    <div th:each="color : ${schedule}">
+                        <tr>
+                            <th rowspan="2" scope="row" th:text="${color.patientName}"></th>
+                            <div th:each="rpColor : ${color.rp}">
+                                <td th:colspan="${rpColor.day}" th:if="${rpColor.rp == '余白'}"></td>
+                                <td class="table-primary" th:colspan="${rpColor.day}"  th:if="${rpColor.rp == '処方'}"></td>
                             </div>
-                        </div>
-                    </tr>
-                    <tr>
-                        <div th:each="doneList : ${doneColor}">
-                            <div th:each="done : ${doneList}">
-                                <td th:colspan="${done.day}" th:if="${done.done == '余白'}"></td>
-                                <td class="table-primary" th:colspan="${done.day}" th:if="${done.done = '配達済'}"></td>
+                        </tr>
+                        <tr>
+                            <div th:each="doneColor : ${color.done}">
+                                <td th:colspan="${doneColor.day}" th:if="${doneColor.done == '余白'}"></td>
+                                <td class="table-success" th:colspan="${doneColor.day}" th:if="${doneColor.done == '配達済'}"></td>
                             </div>
-                        </div>
-                    </tr>
+                        </tr>
+                    </div>
                 </div>
                 </tbody>
             </table>
