@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
 
@@ -41,12 +42,27 @@ public class PrescriptionController {
         this.enteralNutrientDao = enteralNutrientDao;
     }
 
+    @GetMapping("/prescription")
+    public ModelAndView viewPrescriptionPage() {
+        ModelAndView model = new ModelAndView();
+        model.setViewName("prescriptionPage");
+        return model;
+    }
+
     @GetMapping("/")
     public String index(Model model) {
         logger.debug("index in");
-        model.addAttribute("destinationList", destinationDao.findAll());
         model.addAttribute("prescriptionList", prescriptionDao.findAll());
         return "/prescription/index";
+    }
+
+    @PostMapping("/")
+    public String postIndex(@RequestParam(name="destinationId") String destinationId, Model model) {
+        logger.debug("index in");
+        model.addAttribute("destinationId", destinationId);
+        model.addAttribute("destinationName", destinationDao.find(destinationId).name());
+        model.addAttribute("prescriptionList", prescriptionDao.findDestinationId(destinationId));
+        return "redirect:/prescription/";
     }
 
     @PostMapping("/delete")
@@ -61,9 +77,9 @@ public class PrescriptionController {
         logger.debug("edit in");
         model.addAttribute("isEdit", true);
         model.addAttribute("prescription", prescriptionDao.find(id));
-        model.addAttribute("destination", destinationDao.findAll());
-        model.addAttribute("patient", patientDao.findAll());
-        model.addAttribute("enteralNutrient", enteralNutrientDao.findAll());
+        model.addAttribute("destinationList", destinationDao.findAll());
+        model.addAttribute("patientList", patientDao.findAll());
+        model.addAttribute("enteralNutrientList", enteralNutrientDao.findAll());
         return "/prescription/edit";
     }
 

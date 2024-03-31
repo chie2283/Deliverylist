@@ -7,7 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import static net.sejuku.terakoya.deliverylist.DestinationDao.*;
+import static net.sejuku.terakoya.deliverylist.DestinationDao.DestinationInfo;
+import static net.sejuku.terakoya.deliverylist.DestinationDao.DestinationRecord;
 
 @Controller
 @RequestMapping(value = "/destination")

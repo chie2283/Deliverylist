@@ -2,12 +2,12 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
-        <title>配達先編集</title>
+        <title>配達先一覧</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     </head>
     <body>
         <div class="container text-center">
-            <h1>配達先編集</h1>
+            <h1>配達先一覧</h1>
             <table class="table">
                 <thead></thead>
                 <tbody>
@@ -17,8 +17,14 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <form name="edit_form">
-                                            <button type="submit" class="btn btn-primary" id="edit" onclick="return edit()">編集</button>
+                                        <form action="/prescription/" method="post">
+                                            <button type="submit" class="btn btn-primary">処方記録</button>
+                                            <input type="hidden" name="destinationId" th:value="${destination.id}" />
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form action="/destination/edit" method="get">
+                                            <button type="submit" class="btn btn-primary">編集</button>
                                             <input type="hidden" name="id" th:value="${destination.id}" />
                                         </form>
                                     </td>
@@ -41,6 +47,5 @@
             </form>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-        <script type="text/javascript" th:src="@{script.js}"></script>
     </body>
 </html>

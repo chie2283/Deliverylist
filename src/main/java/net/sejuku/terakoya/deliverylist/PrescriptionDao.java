@@ -107,29 +107,6 @@ public class PrescriptionDao {
         return result.get(0);
     }
 
-    void delete(String id) {
-        int rows = jdbcTemplate.update("DELETE FROM prescription WHERE id = ?", Integer.valueOf(id));
-        if (rows != 1) {
-            throw new RuntimeException("削除処理で異常が発生しました");
-        }
-    }
-
-    void update(PrescriptionRecord rec) {
-        int rows = jdbcTemplate.update("UPDATE prescription SET destination_id = ?, patient_id = ?, enteral_nutrient_id = ?, dosage = ?, dt = ?, days = ?, start_date = ?, end_date = ?, delivery_dt = ?, done_days = ?, done = ? WHERE id = ?",
-                rec.destinationId, rec.patientId, rec.enteralNutrientId, rec.dosage, rec.dt, rec.days, rec.startDate, rec.endDate, rec.deliveryDt, rec.doneDays, rec.done, rec.id);
-        if (rows != 1) {
-            throw new RuntimeException("更新処理で異常が発生しました");
-        }
-    }
-
-    void insert(PrescriptionRecord rec) {
-        int rows = jdbcTemplate.update("INSERT INTO prescription (destination_id, patient_id, enteral_nutrient_id, dosage, dt, days, start_date, end_date, delivery_dt, done_days, done) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                rec.destinationId, rec.patientId, rec.enteralNutrientId, rec.dosage, rec.dt, rec.days, rec.startDate, rec.endDate, rec.deliveryDt, rec.doneDays, rec.done);
-        if (rows != 1) {
-            throw new RuntimeException("更新処理で異常が発生しました");
-        }
-    }
-
     List<PrescriptionInfo> findDays() {
         var query = """       
             SELECT rp.id AS id,
@@ -157,5 +134,57 @@ public class PrescriptionDao {
         logger.debug(query);
         List<PrescriptionInfo> results = jdbcTemplate.query(query, new DataClassRowMapper<>(PrescriptionInfo.class));
         return results;
+    }
+
+    List<PrescriptionInfo> findDestinationId(String destinationId) {
+        var query = """       
+            SELECT rp.id AS id,
+                   d.id AS destination_id,
+                   d.name AS destination_name,
+                   p.id AS patient_id,
+                   p.name AS patient_name,
+                   e.id AS enteral_nutrient_id,
+                   e.name AS enteral_nutrient_name,
+                   rp.dosage AS dosage,
+                   rp.dt AS dt,
+                   rp.days AS days,
+                   rp.start_date AS start_date,
+                   rp.end_date AS end_date,
+                   rp.delivery_dt AS delivery_dt,
+                   rp.done_days AS done_days,
+                   rp.done AS done
+            FROM prescription rp
+            LEFT JOIN destination d ON(rp.destination_id = d.id)
+            LEFT JOIN patient p ON(rp.patient_id = p.id)
+            LEFT JOIN enteral_nutrient e ON(rp.enteral_nutrient_id = e.id)
+            WHERE rp.destination_id = ?
+            ORDER BY p.id ASC, rp.start_date ASC;
+        """;
+        logger.debug(query);
+        List<PrescriptionInfo> results = jdbcTemplate.query(query, new DataClassRowMapper<>(PrescriptionInfo.class), Integer.valueOf(destinationId));
+        return results;
+    }
+
+    void delete(String id) {
+        int rows = jdbcTemplate.update("DELETE FROM prescription WHERE id = ?", Integer.valueOf(id));
+        if (rows != 1) {
+            throw new RuntimeException("削除処理で異常が発生しました");
+        }
+    }
+
+    void update(PrescriptionRecord rec) {
+        int rows = jdbcTemplate.update("UPDATE prescription SET destination_id = ?, patient_id = ?, enteral_nutrient_id = ?, dosage = ?, dt = ?, days = ?, start_date = ?, end_date = ?, delivery_dt = ?, done_days = ?, done = ? WHERE id = ?",
+                rec.destinationId, rec.patientId, rec.enteralNutrientId, rec.dosage, rec.dt, rec.days, rec.startDate, rec.endDate, rec.deliveryDt, rec.doneDays, rec.done, rec.id);
+        if (rows != 1) {
+            throw new RuntimeException("更新処理で異常が発生しました");
+        }
+    }
+
+    void insert(PrescriptionRecord rec) {
+        int rows = jdbcTemplate.update("INSERT INTO prescription (destination_id, patient_id, enteral_nutrient_id, dosage, dt, days, start_date, end_date, delivery_dt, done_days, done) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                rec.destinationId, rec.patientId, rec.enteralNutrientId, rec.dosage, rec.dt, rec.days, rec.startDate, rec.endDate, rec.deliveryDt, rec.doneDays, rec.done);
+        if (rows != 1) {
+            throw new RuntimeException("更新処理で異常が発生しました");
+        }
     }
 }

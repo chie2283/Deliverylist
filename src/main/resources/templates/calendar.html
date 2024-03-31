@@ -6,14 +6,14 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     </head>
     <body>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a class="navbar-brand" href="#"><span>配達カレンダー</span></a>
+                <button onclick="location.href='/prescription/'">処方記録に戻る</button>
+            </div>
+        </nav>
         <div class="container text-center">
-            <label>
-                <select>
-                    <th:block th:each="destination : ${destinationList}">
-                        <option th:value="${destination.id}" th:text="${destination.name}" th:selected="${active == destination.id}"></option>
-                    </th:block>
-                </select>
-            </label>
+            <label th:text="${destinationName}"></label>
         </div>
         <div class="container text-center">
             <table class="table table-bordered table-responsive">
