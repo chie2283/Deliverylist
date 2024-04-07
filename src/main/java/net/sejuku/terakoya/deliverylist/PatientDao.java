@@ -38,6 +38,7 @@ public class PatientDao {
                 p.name,
                 p.birthday
           FROM patient p
+          ORDER BY p.name ASC;
       """;
         logger.debug(query);
         List<PatientDao.PatientInfo> results = jdbcTemplate.query(query, new DataClassRowMapper<>(PatientDao.PatientInfo.class));
@@ -64,7 +65,7 @@ public class PatientDao {
     }
 
     void update(PatientDao.PatientRecord rec) {
-        int rows = jdbcTemplate.update("UPDATE patient SET name = ?, birthday = ?, WHERE id = ?",
+        int rows = jdbcTemplate.update("UPDATE patient SET name = ?, birthday = ? WHERE id = ?",
                 rec.name, rec.birthday, rec.id);
         if (rows != 1) {
             throw new RuntimeException("更新処理で異常が発生しました");

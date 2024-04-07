@@ -17,7 +17,7 @@
             </div>
         </nav>
         <div class="container text-center">
-            <label th:text="${destinationName}"></label>
+            <h1 th:text="${destinationName}"></h1>
             <table class="table">
                 <thead></thead>
                 <tbody>
@@ -49,6 +49,7 @@
                                     <form action="/prescription/edit" method="get">
                                         <input type="hidden" name="id" th:value="${prescription.id}" />
                                         <input type="hidden" name="isEdit" th:value="${isEdit}" />
+                                        <input type="hidden" name="destinationId" th:value="${destinationId}" />
                                         <button type="submit" class="btn btn-primary">編集</button>
                                     </form>
                                 </td>
@@ -67,6 +68,7 @@
             <form action="/prescription/new" method="get">
                 <div class="d-flex justify-content-start">
                     <button type="submit" class="btn btn-primary">追加</button>
+                    <input type="hidden" name="destinationId" th:value="${destinationId}" />
                 </div>
             </form>
         </div>

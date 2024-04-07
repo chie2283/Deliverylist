@@ -5,10 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
@@ -30,24 +27,32 @@ public class CalendarController {
         this.calendarDay = calendarDay;
     }
 
-    @GetMapping("/")
-    public String index(Model model) {
-        logger.debug("index in");
-        model.addAttribute("prescriptionList", prescriptionDao.findAll());
+    @GetMapping("/{destinationId}")
+    public String getIndex(@PathVariable(name="destinationId") String destinationId, Model model) {
+        logger.debug("index get in");
+        model.addAttribute("destinationId", destinationId);
+        model.addAttribute("destinationName", destinationDao.find(destinationId).name());
+        model.addAttribute("prescriptionList", prescriptionDao.findDestinationId(destinationId));
         model.addAttribute("yearMonth", calendarDay.ymList());
         model.addAttribute("days", calendarDay.list());
         var firstDay = LocalDate.parse(calendarDay.yearMonth() + "/01", DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         var lastDay = LocalDate.now().plusMonths(3).with(TemporalAdjusters.lastDayOfMonth());
-        model.addAttribute("schedules", calendarDay.getSchedule(firstDay, lastDay));
+        model.addAttribute("schedules", calendarDay.getSchedule(destinationId, firstDay, lastDay));
         return "/calendar";
     }
 
     @PostMapping("/")
     public String postIndex(@RequestParam(name="destinationId") String destinationId, Model model) {
-        logger.debug("index in");
+        logger.debug("index post in");
+        model.addAttribute("destinationId", destinationId);
         model.addAttribute("destinationName", destinationDao.find(destinationId).name());
         model.addAttribute("prescriptionList", prescriptionDao.findDestinationId(destinationId));
-        return "redirect:/calendar/";
+        model.addAttribute("yearMonth", calendarDay.ymList());
+        model.addAttribute("days", calendarDay.list());
+        var firstDay = LocalDate.parse(calendarDay.yearMonth() + "/01", DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        var lastDay = LocalDate.now().plusMonths(3).with(TemporalAdjusters.lastDayOfMonth());
+        model.addAttribute("schedules", calendarDay.getSchedule(destinationId, firstDay, lastDay));
+        return "/calendar";
     }
 
     @GetMapping("/calendar")

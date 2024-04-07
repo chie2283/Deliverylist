@@ -107,7 +107,7 @@ public class PrescriptionDao {
         return result.get(0);
     }
 
-    List<PrescriptionInfo> findDays() {
+    List<PrescriptionInfo> findDays(String destinationId) {
         var query = """       
             SELECT rp.id AS id,
                    d.id AS destination_id,
@@ -128,11 +128,11 @@ public class PrescriptionDao {
             LEFT JOIN destination d ON(rp.destination_id = d.id)
             LEFT JOIN patient p ON(rp.patient_id = p.id)
             LEFT JOIN enteral_nutrient e ON(rp.enteral_nutrient_id = e.id)
-            WHERE rp.start_date >= CURRENT_DATE - INTERVAL '2' MONTH AND rp.end_date <= CURRENT_DATE + INTERVAL '3' MONTH
+            WHERE rp.start_date >= CURRENT_DATE - INTERVAL '2' MONTH AND rp.end_date <= CURRENT_DATE + INTERVAL '3' MONTH AND rp.destination_id = ?
             ORDER BY p.id ASC, rp.start_date ASC;
         """;
         logger.debug(query);
-        List<PrescriptionInfo> results = jdbcTemplate.query(query, new DataClassRowMapper<>(PrescriptionInfo.class));
+        List<PrescriptionInfo> results = jdbcTemplate.query(query, new DataClassRowMapper<>(PrescriptionInfo.class), Integer.valueOf(destinationId));
         return results;
     }
 

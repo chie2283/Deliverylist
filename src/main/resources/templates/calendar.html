@@ -9,7 +9,10 @@
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
                 <a class="navbar-brand" href="#"><span>配達カレンダー</span></a>
-                <button onclick="location.href='/prescription/'">処方記録に戻る</button>
+                <form action="/prescription/" method="post">
+                    <button type="submit" class="btn btn-primary">処方記録に戻る</button>
+                    <input type="hidden" name="destinationId" th:value="${destinationId}" />
+                </form>
             </div>
         </nav>
         <div class="container text-center">

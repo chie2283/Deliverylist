@@ -2,17 +2,18 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
-        <title>患者編集</title>
+        <title>患者一覧</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     </head>
     <body>
         <div class="container text-center">
-            <h1>患者編集</h1>
+            <h1>患者一覧</h1>
             <table class="table">
                 <thead></thead>
                 <tbody>
                     <tr th:each="patient : ${patientList}">
                         <td th:text="${patient.name}"></td>
+                        <td th:text="${patient.birthday}"></td>
                         <td>
                             <table>
                                 <tr>
@@ -38,6 +39,12 @@
             <form action="/patient/new" method="get">
                 <div class="d-flex justify-content-start">
                     <button type="submit" class="btn btn-primary">追加</button>
+                </div>
+            </form>
+            <form action="/prescription/new" method="get">
+                <div class="d-flex justify-content-start">
+                    <input type="hidden" name="destinationId" th:value="${destinationId}" />
+                    <button type="submit" class="btn btn-primary">処方記録の登録に戻る</button>
                 </div>
             </form>
         </div>

@@ -2,17 +2,15 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
-        <title>配達先別患者リスト/登録</title>
+        <title>処方記録/登録</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     </head>
     <body>
         <div class="container">
             <form action="/prescription/register" method="post" class="needs-validation" novalidate>
                 <div class="mb-3">
-                    <label for="destinationId" class="form-label">配達先</label>
-                    <select class="form-select" id="destinationId" name="destinationId">
-                        <option th:each="destination : ${destinationList}" th:value="${destination.id}" th:text="${destination.name}" th:selected="${destination.id == prescription.destinationId}"></option>
-                    </select>
+                    <p>配達先</p>
+                    <p th:text="${destinationName}"></p>
                 </div>
                 <div class="mb-3">
                     <label for="patientId" class="form-label">患者氏名</label>
@@ -28,7 +26,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="dosage" class="form-label">1日用量</label>
-                    <input type="text" class="form-control" id="dosage" name="dosage" maxlength="128" placeholder="1日用量を入力してください" th:value="${prescription.dosage}" required />
+                    <input type="text" class="form-control" id="dosage" name="dosage" maxlength="128" placeholder="1日に使用する個数（例：3p、1缶 etc）" th:value="${prescription.dosage}" required />
                 </div>
                 <div class="mb-3">
                     <label for="dt" class="form-label">処方日</label>
@@ -40,11 +38,11 @@
                 </div>
                 <div class="mb-3">
                     <label for="startDate" class="form-label">使用開始日</label>
-                    <input type="date" class="form-control" id="startDate" name="startDate" placeholder="使用開始日を入力してください" th:value="${prescription.startDate}" required />
+                    <input type="date" class="form-control" id="startDate" name="startDate" th:value="${prescription.startDate}" required />
                 </div>
                 <div class="mb-3">
                     <label for="deliveryDt" class="form-label">配達予定日</label>
-                    <input type="date" class="form-control" id="deliveryDt" name="deliveryDt" placeholder="配達日を入力してください" th:value="${prescription.deliveryDt}" />
+                    <input type="date" class="form-control" id="deliveryDt" name="deliveryDt" th:value="${prescription.deliveryDt}" />
                 </div>
                 <div class="mb-3">
                     <label for="doneDays" class="form-label">配達予定日数</label>
@@ -58,14 +56,15 @@
                     </select>
                 </div>
                 <div class="mb-3 d-grid">
-                    <input type="hidden" name="prescriptionId" th:value="${prescription.id}" />
+                    <input type="hidden" name="id" th:value="${prescription.id}" />
                     <input type="hidden" name="isEdit" th:value="${isEdit}" />
+                    <input type="hidden" name="destinationId" th:value="${destinationId}" />
                     <button type="submit" class="btn btn-primary">登録</button>
                 </div>
             </form>
-            <form action="/patient/new" method="get">
+            <form action="/patient/" method="get">
                 <div class="d-flex justify-content-start">
-                    <input type="hidden" name="returnPath" value="prescription/new">
+                    <input type="hidden" name="destinationId" th:value="${destinationId}" />
                     <button type="submit" class="btn btn-primary">患者の新規登録・編集</button>
                 </div>
             </form>

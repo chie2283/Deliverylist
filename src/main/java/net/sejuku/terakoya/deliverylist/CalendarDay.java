@@ -87,15 +87,15 @@ public class CalendarDay {
         return list;
     }
 
-    public Map<Integer, List<PrescriptionInfo>> grpByPatient() {
-        List<PrescriptionInfo> days = this.prescriptionDao.findDays();
+    public Map<Integer, List<PrescriptionInfo>> grpByPatient(String destinationId) {
+        List<PrescriptionInfo> days = this.prescriptionDao.findDays(destinationId);
         Map<Integer, List<PrescriptionInfo>> grpByPatient = days.stream().collect(Collectors.groupingBy(PrescriptionInfo::patientId));
         return grpByPatient;
     }
 
-    public List<List<Schedule>> getSchedule(LocalDate firstDay, LocalDate lastDay) {
+    public List<List<Schedule>> getSchedule(String destinationId, LocalDate firstDay, LocalDate lastDay) {
         var getSchedule = new ArrayList<List<Schedule>>();
-        for(Map.Entry<Integer, List<PrescriptionInfo>> element : grpByPatient().entrySet()) {
+        for(Map.Entry<Integer, List<PrescriptionInfo>> element : grpByPatient(destinationId).entrySet()) {
             String id = String.valueOf(element.getKey());
             String patientName = this.patientDao.find(id).name();
             var scheduleList = new ArrayList<Schedule>();

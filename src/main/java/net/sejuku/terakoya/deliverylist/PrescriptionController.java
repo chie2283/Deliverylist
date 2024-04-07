@@ -49,20 +49,22 @@ public class PrescriptionController {
         return model;
     }
 
-    @GetMapping("/")
-    public String index(Model model) {
-        logger.debug("index in");
-        model.addAttribute("prescriptionList", prescriptionDao.findAll());
+    @GetMapping("/{destinationId}")
+    public String getIndex(@PathVariable(name="destinationId") String destinationId, Model model) {
+        logger.debug("index get in");
+        model.addAttribute("destinationId", destinationId);
+        model.addAttribute("destinationName", destinationDao.find(destinationId).name());
+        model.addAttribute("prescriptionList", prescriptionDao.findDestinationId(destinationId));
         return "/prescription/index";
     }
 
     @PostMapping("/")
     public String postIndex(@RequestParam(name="destinationId") String destinationId, Model model) {
-        logger.debug("index in");
+        logger.debug("index post in");
         model.addAttribute("destinationId", destinationId);
         model.addAttribute("destinationName", destinationDao.find(destinationId).name());
         model.addAttribute("prescriptionList", prescriptionDao.findDestinationId(destinationId));
-        return "redirect:/prescription/";
+        return "/prescription/index";
     }
 
     @PostMapping("/delete")
@@ -73,23 +75,25 @@ public class PrescriptionController {
     }
 
     @GetMapping("/edit")
-    public String edit(@RequestParam String id, Model model) {
+    public String edit(@RequestParam String id, String destinationId, Model model) {
         logger.debug("edit in");
         model.addAttribute("isEdit", true);
         model.addAttribute("prescription", prescriptionDao.find(id));
-        model.addAttribute("destinationList", destinationDao.findAll());
+        model.addAttribute("destinationId", destinationId);
+        model.addAttribute("destinationName", prescriptionDao.find(id).destinationName());
         model.addAttribute("patientList", patientDao.findAll());
         model.addAttribute("enteralNutrientList", enteralNutrientDao.findAll());
         return "/prescription/edit";
     }
 
     @GetMapping("/new")
-    public String new_entry(Model model) {
+    public String new_entry(@RequestParam(name="destinationId") String destinationId, Model model) {
         logger.debug("new in");
         model.addAttribute("isEdit", false);
-        model.addAttribute("prescription", new PrescriptionInfo(-1,0,"",0,"",0,
-                "","", null,14,null,null,null,0,false));
-        model.addAttribute("destinationList", destinationDao.findAll());
+        model.addAttribute("prescription", new PrescriptionInfo(-1,Integer.parseInt(destinationId),"",-1,"",-1,
+                "","", null,14,null,null,null,14,false));
+        model.addAttribute("destinationId", destinationId);
+        model.addAttribute("destinationName", destinationDao.find(destinationId).name());
         model.addAttribute("patientList", patientDao.findAll());
         model.addAttribute("enteralNutrientList", enteralNutrientDao.findAll());
         return "/prescription/edit";
@@ -129,6 +133,6 @@ public class PrescriptionController {
                     form.done
             ));
         }
-        return "redirect:/prescription/";
+        return "redirect:/prescription/" + form.destinationId;
     }
 }
