@@ -6,19 +6,17 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container">
-                <a class="navbar-brand" href="#"><span>配達カレンダー</span></a>
-                <form action="/prescription/" method="post">
-                    <button type="submit" class="btn btn-primary">処方記録に戻る</button>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">配達カレンダー</a>
+                <form th:action="@{/prescription/}" method="post">
                     <input type="hidden" name="destinationId" th:value="${destinationId}" />
+                    <button type="submit" class="btn btn-primary">処方記録に戻る</button>
                 </form>
             </div>
         </nav>
         <div class="container text-center">
-            <label th:text="${destinationName}"></label>
-        </div>
-        <div class="container text-center">
+            <h1 th:text="${destinationName}"></h1>
             <table class="table table-bordered table-responsive">
                 <thead>
                     <tr>

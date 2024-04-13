@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
 
@@ -42,13 +41,6 @@ public class PrescriptionController {
         this.enteralNutrientDao = enteralNutrientDao;
     }
 
-    @GetMapping("/prescription")
-    public ModelAndView viewPrescriptionPage() {
-        ModelAndView model = new ModelAndView();
-        model.setViewName("prescriptionPage");
-        return model;
-    }
-
     @GetMapping("/{destinationId}")
     public String getIndex(@PathVariable(name="destinationId") String destinationId, Model model) {
         logger.debug("index get in");
@@ -68,10 +60,10 @@ public class PrescriptionController {
     }
 
     @PostMapping("/delete")
-    public String delete(@RequestParam String id) {
+    public String delete(@RequestParam String id, String destinationId) {
         logger.info("delete id is {}", id);
         prescriptionDao.delete(id);
-        return "redirect:/prescription/";
+        return "redirect:/prescription/" + destinationId;
     }
 
     @GetMapping("/edit")

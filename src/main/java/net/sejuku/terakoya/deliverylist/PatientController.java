@@ -16,41 +16,51 @@ import static net.sejuku.terakoya.deliverylist.PatientDao.*;
 public class PatientController {
     Logger logger = LoggerFactory.getLogger(PatientController.class);
     private PatientDao patientDao;
-    record PatientEditForm(String patientId, String patientName, LocalDate patientBirthday, Boolean isEdit) {}
+    record PatientEditForm(String patientId, String patientName, LocalDate patientBirthday, Boolean isEdit, String destinationId) {}
 
     @Autowired
     PatientController(PatientDao patientDao) {
         this.patientDao = patientDao;
     }
 
-    @GetMapping("/")
-    public String getIndex(@RequestParam(name="destinationId") String destinationId, Model model) {
+    @GetMapping("/{destinationId}")
+    public String getIndex(@PathVariable(name="destinationId") String destinationId, Model model) {
         logger.debug("index get in");
         model.addAttribute("patientList", patientDao.findAll());
         model.addAttribute("destinationId", destinationId);
         return "/patient/index";
     }
 
+    @PostMapping("/")
+    public String postIndex(@RequestParam(name="destinationId") String destinationId, Model model) {
+        logger.debug("index post in");
+        model.addAttribute("patientList", patientDao.findAll());
+        model.addAttribute("destinationId", destinationId);
+        return "/patient/index";
+    }
+
     @PostMapping("/delete")
-    public String delete(@RequestParam String id) {
+    public String delete(@RequestParam String id, String destinationId) {
         logger.info("delete id is {}", id);
         patientDao.delete(id);
-        return "redirect:/patient/new";
+        return "redirect:/patient/" + destinationId;
     }
 
     @GetMapping("/edit")
-    public String edit(@RequestParam String id, Model model) {
+    public String edit(@RequestParam String id, String destinationId, Model model) {
         logger.debug("edit in");
         model.addAttribute("isEdit", true);
         model.addAttribute("patient", patientDao.find(id));
+        model.addAttribute("destinationId", destinationId);
         return "/patient/edit";
     }
 
     @GetMapping("/new")
-    public String new_entry(Model model) {
+    public String new_entry(@RequestParam String destinationId, Model model) {
         logger.debug("new in");
         model.addAttribute("isEdit", false);
         model.addAttribute("patient", new PatientInfo(-1,"",null));
+        model.addAttribute("destinationId", destinationId);
         return "/patient/edit";
     }
 
@@ -70,6 +80,6 @@ public class PatientController {
                     form.patientBirthday
             ));
         }
-        return "redirect:/patient/";
+        return "redirect:/patient/" + form.destinationId;
     }
 }
