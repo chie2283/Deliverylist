@@ -41,7 +41,7 @@ public class DestinationController {
         logger.debug("edit in");
         model.addAttribute("isEdit", true);
         model.addAttribute("destination", destinationDao.find(id));
-        return "/destination/edit";
+        return "destination/edit";
     }
 
     @GetMapping("/new")
