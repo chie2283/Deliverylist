@@ -26,7 +26,7 @@ public class DestinationController {
     public String index(Model model) {
         logger.debug("index in");
         model.addAttribute("destinationList", destinationDao.findAll());
-        return "/destination/index";
+        return "destination/index";
     }
 
     @PostMapping("/delete")
@@ -41,7 +41,7 @@ public class DestinationController {
         logger.debug("edit in");
         model.addAttribute("isEdit", true);
         model.addAttribute("destination", destinationDao.find(id));
-        return "destination/edit";
+        return "/destination/edit";
     }
 
     @GetMapping("/new")
