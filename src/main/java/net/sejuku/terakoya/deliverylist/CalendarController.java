@@ -38,7 +38,7 @@ public class CalendarController {
         var firstDay = LocalDate.parse(calendarDay.yearMonth() + "/01", DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         var lastDay = LocalDate.now().plusMonths(3).with(TemporalAdjusters.lastDayOfMonth());
         model.addAttribute("schedules", calendarDay.getSchedule(destinationId, firstDay, lastDay));
-        return "/calendar";
+        return "calendar";
     }
 
     @PostMapping("/")
@@ -52,7 +52,7 @@ public class CalendarController {
         var firstDay = LocalDate.parse(calendarDay.yearMonth() + "/01", DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         var lastDay = LocalDate.now().plusMonths(3).with(TemporalAdjusters.lastDayOfMonth());
         model.addAttribute("schedules", calendarDay.getSchedule(destinationId, firstDay, lastDay));
-        return "/calendar";
+        return "calendar";
     }
 
     @GetMapping("/calendar")

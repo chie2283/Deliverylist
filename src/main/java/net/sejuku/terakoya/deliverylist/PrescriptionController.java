@@ -47,7 +47,7 @@ public class PrescriptionController {
         model.addAttribute("destinationId", destinationId);
         model.addAttribute("destinationName", destinationDao.find(destinationId).name());
         model.addAttribute("prescriptionList", prescriptionDao.findDestinationId(destinationId));
-        return "/prescription/index";
+        return "prescription/index";
     }
 
     @PostMapping("/")
@@ -56,14 +56,14 @@ public class PrescriptionController {
         model.addAttribute("destinationId", destinationId);
         model.addAttribute("destinationName", destinationDao.find(destinationId).name());
         model.addAttribute("prescriptionList", prescriptionDao.findDestinationId(destinationId));
-        return "/prescription/index";
+        return "prescription/index";
     }
 
     @PostMapping("/delete")
     public String delete(@RequestParam String id, String destinationId) {
         logger.info("delete id is {}", id);
         prescriptionDao.delete(id);
-        return "redirect:/prescription/" + destinationId;
+        return "redirect:prescription/" + destinationId;
     }
 
     @GetMapping("/edit")
@@ -75,7 +75,7 @@ public class PrescriptionController {
         model.addAttribute("destinationName", prescriptionDao.find(id).destinationName());
         model.addAttribute("patientList", patientDao.findAll());
         model.addAttribute("enteralNutrientList", enteralNutrientDao.findAll());
-        return "/prescription/edit";
+        return "prescription/edit";
     }
 
     @GetMapping("/new")
@@ -88,7 +88,7 @@ public class PrescriptionController {
         model.addAttribute("destinationName", destinationDao.find(destinationId).name());
         model.addAttribute("patientList", patientDao.findAll());
         model.addAttribute("enteralNutrientList", enteralNutrientDao.findAll());
-        return "/prescription/edit";
+        return "prescription/edit";
     }
 
     @PostMapping("/register")
@@ -125,6 +125,6 @@ public class PrescriptionController {
                     form.done
             ));
         }
-        return "redirect:/prescription/" + form.destinationId;
+        return "redirect:prescription/" + form.destinationId;
     }
 }

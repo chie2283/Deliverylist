@@ -28,7 +28,7 @@ public class PatientController {
         logger.debug("index get in");
         model.addAttribute("patientList", patientDao.findAll());
         model.addAttribute("destinationId", destinationId);
-        return "/patient/index";
+        return "patient/index";
     }
 
     @PostMapping("/")
@@ -36,14 +36,14 @@ public class PatientController {
         logger.debug("index post in");
         model.addAttribute("patientList", patientDao.findAll());
         model.addAttribute("destinationId", destinationId);
-        return "/patient/index";
+        return "patient/index";
     }
 
     @PostMapping("/delete")
     public String delete(@RequestParam String id, String destinationId) {
         logger.info("delete id is {}", id);
         patientDao.delete(id);
-        return "redirect:/patient/" + destinationId;
+        return "redirect:patient/" + destinationId;
     }
 
     @GetMapping("/edit")
@@ -52,7 +52,7 @@ public class PatientController {
         model.addAttribute("isEdit", true);
         model.addAttribute("patient", patientDao.find(id));
         model.addAttribute("destinationId", destinationId);
-        return "/patient/edit";
+        return "patient/edit";
     }
 
     @GetMapping("/new")
@@ -61,7 +61,7 @@ public class PatientController {
         model.addAttribute("isEdit", false);
         model.addAttribute("patient", new PatientInfo(-1,"",null));
         model.addAttribute("destinationId", destinationId);
-        return "/patient/edit";
+        return "patient/edit";
     }
 
     @PostMapping("/register")
@@ -80,6 +80,6 @@ public class PatientController {
                     form.patientBirthday
             ));
         }
-        return "redirect:/patient/" + form.destinationId;
+        return "redirect:patient/" + form.destinationId;
     }
 }

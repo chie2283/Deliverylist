@@ -33,7 +33,7 @@ public class DestinationController {
     public String delete(@RequestParam String id) {
         logger.info("delete id is {}", id);
         destinationDao.delete(id);
-        return "redirect:/destination/";
+        return "redirect:destination/";
     }
 
     @GetMapping("/edit")
@@ -41,7 +41,7 @@ public class DestinationController {
         logger.debug("edit in");
         model.addAttribute("isEdit", true);
         model.addAttribute("destination", destinationDao.find(id));
-        return "/destination/edit";
+        return "destination/edit";
     }
 
     @GetMapping("/new")
@@ -49,7 +49,7 @@ public class DestinationController {
         logger.debug("new in");
         model.addAttribute("isEdit", false);
         model.addAttribute("destination", new DestinationInfo(-1,""));
-        return "/destination/edit";
+        return "destination/edit";
     }
 
     @PostMapping("/register")
@@ -66,6 +66,6 @@ public class DestinationController {
                     form.destinationName
             ));
         }
-        return "redirect:/destination/";
+        return "redirect:destination/";
     }
 }
