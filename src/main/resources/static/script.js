@@ -1,19 +1,33 @@
-const editModal = document.getElementById('editModal')
-if (editModal) {
-  editModal.addEventListener('show.bs.modal', event => {
-    // Button that triggered the modal
-    const button = event.relatedTarget
-    // Extract info from data-bs-* attributes
-    const destinationName = button.getAttribute('data-bs-whatever')
-    //const destinationId =
-    // If necessary, you could initiate an Ajax request here
-    // and then do the updating in a callback.
+(() => {
+    'use strict'
 
-    // Update the modal's content.
-    const modalBodyInput = editModal.querySelector('.modal-body input')
-    modalBodyInput.value = destinationName
-    //const modalFooterInput = editModal.querySelector('destinationId')
-    //modalFooterInput.value = destinationId
-  })
-}
+    const buttons = document.querySelectorAll('.edit-button');
+    const destinationId = document.getElementById('destinationId');
+    const destinationName = document.getElementById('destinationName');
+    const isEdit = document.getElementById('isEdit');
 
+    for(const button of buttons) {
+        button.addEventListener('click', event => {
+            const el = event.target;
+            console.log(el.dataset.destinationId);
+
+            fetch(`/destination/${el.dataset.destinationId}`)
+            .then(response => response.json())
+            .then(result => {
+                destinationId.value = result.id;
+                destinationName.value = result.name;
+            })
+
+            .catch(error => {
+                console.error('Error:', error);
+            });
+            isEdit.value = "true";
+        })
+    }
+
+    document.getElementById('addButton').addEventListener('click', event => {
+        destinationId.value = -1;
+        destinationName.value = "";
+        isEdit.value = "false";
+    });
+})()

@@ -1,7 +1,7 @@
---DROP TABLE IF EXISTS prescription;
---DROP TABLE IF EXISTS enteral_nutrient;
---DROP TABLE IF EXISTS patient;
---DROP TABLE IF EXISTS destination;
+DROP TABLE IF EXISTS prescription;
+DROP TABLE IF EXISTS enteral_nutrient;
+DROP TABLE IF EXISTS patient;
+DROP TABLE IF EXISTS destination;
 
 CREATE TABLE IF NOT EXISTS destination (
     id INT DEFAULT 0 NOT NULL AUTO_INCREMENT,

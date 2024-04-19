@@ -63,7 +63,7 @@ public class PrescriptionController {
     public String delete(@RequestParam String id, String destinationId) {
         logger.info("delete id is {}", id);
         prescriptionDao.delete(id);
-        return "redirect:prescription/" + destinationId;
+        return "redirect:/prescription/" + destinationId;
     }
 
     @GetMapping("/edit")
@@ -125,6 +125,6 @@ public class PrescriptionController {
                     form.done
             ));
         }
-        return "redirect:prescription/" + form.destinationId;
+        return "redirect:/prescription/" + form.destinationId;
     }
 }

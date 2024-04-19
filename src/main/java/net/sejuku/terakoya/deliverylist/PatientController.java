@@ -43,7 +43,7 @@ public class PatientController {
     public String delete(@RequestParam String id, String destinationId) {
         logger.info("delete id is {}", id);
         patientDao.delete(id);
-        return "redirect:patient/" + destinationId;
+        return "redirect:/patient/" + destinationId;
     }
 
     @GetMapping("/edit")
@@ -80,6 +80,6 @@ public class PatientController {
                     form.patientBirthday
             ));
         }
-        return "redirect:patient/" + form.destinationId;
+        return "redirect:/patient/" + form.destinationId;
     }
 }
