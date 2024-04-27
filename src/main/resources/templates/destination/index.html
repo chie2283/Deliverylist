@@ -57,7 +57,7 @@
                     <form th:action="@{/destination/register}" method="post" class="needs-validation" novalidate>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="destinationName" class="form-label">配達先</label>
+                                <label for="destinationName" class="form-label">配達先 <span class="badge text-bg-danger">必須</span></label>
                                 <input type="text" class="form-control" id="destinationName" name="destinationName" maxlength="128" th:value="${destinationName}" required />
                             </div>
                         </div>

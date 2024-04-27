@@ -6,55 +6,55 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     </head>
     <body>
-        <nav class="navbar bg-light">
+        <nav class="navbar navbar-expand-lg bg-info-subtle">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"><span>処方記録</span></a>
+                <a class="navbar-brand" href="#">処方記録</a>
             </div>
         </nav>
         <div class="container">
             <form th:action="@{/prescription/register}" method="post" class="needs-validation" novalidate>
                 <div class="mb-3">
-                    <p>配達先</p>
+                    <label class="form-label">配達先</label>
                     <p th:text="${destinationName}"></p>
                 </div>
                 <div class="mb-3">
-                    <label for="patientId" class="form-label">患者氏名</label>
+                    <label for="patientId" class="form-label">患者氏名　<span class="badge text-bg-danger">必須</span></label>
                     <select class="form-select" id="patientId" name="patientId">
                         <option th:each="patient : ${patientList}" th:value="${patient.id}" th:text="${patient.name}" th:selected="${patient.id == prescription.patientId}"></option>
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="enteralNutrientId" class="form-label">栄養剤種類</label>
+                    <label for="enteralNutrientId" class="form-label">栄養剤種類　<span class="badge text-bg-danger">必須</span></label>
                     <select class="form-select" id="enteralNutrientId" name="enteralNutrientId">
                         <option th:each="enteralNutrient : ${enteralNutrientList}" th:value="${enteralNutrient.id}" th:text="${enteralNutrient.name}" th:selected="${enteralNutrient.id == prescription.enteralNutrientId}"></option>
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="dosage" class="form-label">1日用量</label>
-                    <input type="text" class="form-control" id="dosage" name="dosage" maxlength="128" placeholder="1日に使用する個数（例：3p、1缶 etc）" th:value="${prescription.dosage}" required />
+                    <label for="dosage" class="form-label">1日用量　<span class="badge text-bg-danger">必須</span></label>
+                    <input type="text" class="form-control" id="dosage" name="dosage" maxlength="128" placeholder="1日に使用する個数（例：3p、1缶など）" th:value="${prescription.dosage}" required />
                 </div>
                 <div class="mb-3">
-                    <label for="dt" class="form-label">処方日</label>
+                    <label for="dt" class="form-label">処方日　<span class="badge text-bg-danger">必須</span></label>
                     <input type="date" class="form-control" id="dt" name="dt" th:value="${prescription.dt}" required />
                 </div>
                 <div class="mb-3">
-                    <label for="days" class="form-label">処方日数</label>
+                    <label for="days" class="form-label">処方日数　<span class="badge text-bg-danger">必須</span></label>
                     <input type="number" class="form-control" id="days" name="days" min="1" max="90" th:value="${prescription.days}" required />
                 </div>
                 <div class="mb-3">
-                    <label for="startDate" class="form-label">使用開始日</label>
+                    <label for="startDate" class="form-label">使用開始日　<span class="badge text-bg-danger">必須</span></label>
                     <input type="date" class="form-control" id="startDate" name="startDate" th:value="${prescription.startDate}" required />
                 </div>
                 <div class="mb-3">
-                    <label for="deliveryDt" class="form-label">配達予定日</label>
+                    <label for="deliveryDt" class="form-label">配達予定日　<span class="badge text-bg-danger">必須</span></label>
                     <input type="date" class="form-control" id="deliveryDt" name="deliveryDt" th:value="${prescription.deliveryDt}" required />
                 </div>
                 <div class="mb-3">
-                    <label for="doneDays" class="form-label">配達予定日数</label>
+                    <label for="doneDays" class="form-label">配達予定日数　<span class="badge text-bg-danger">必須</span></label>
                     <input type="number" class="form-control" id="doneDays" name="doneDays" min="1" max="90" th:value="${prescription.doneDays}" required />
                 </div>
                 <div class="mb-3">
-                    <label for="done" class="form-label">✓</label>
+                    <label for="done" class="form-label">状態　<span class="badge text-bg-danger">必須</span></label>
                     <select class="form-select" id="done" name="done">
                         <option th:value="false">未</option>
                         <option th:value="true">済</option>
@@ -65,12 +65,6 @@
                     <input type="hidden" name="isEdit" th:value="${isEdit}" />
                     <input type="hidden" name="destinationId" th:value="${destinationId}" />
                     <button type="submit" class="btn btn-primary">登録</button>
-                </div>
-            </form>
-            <form th:action="@{/patient/}" method="post">
-                <div class="d-inline-flex p-2">
-                    <input type="hidden" name="destinationId" th:value="${destinationId}" />
-                    <button type="submit" class="btn btn-primary">患者の新規登録・編集</button>
                 </div>
             </form>
             <form th:action="@{/prescription/}" method="post">

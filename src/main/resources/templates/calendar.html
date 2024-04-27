@@ -15,9 +15,9 @@
                 </form>
             </div>
         </nav>
-        <div class="container text-center">
+        <div class="container text-center table-responsive">
             <h1 th:text="${destinationName}"></h1>
-            <table class="table table-bordered table-responsive">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th></th>
@@ -32,7 +32,7 @@
                     <tr>
                         <th></th>
                         <div th:each="list : ${days}">
-                            <th scope="col" th:each="week : ${list.weekList}" th:text="${week}"></th>
+                            <th scope="col" th:each="week : ${list.weeksList}" th:text="${week}"></th>
                         </div>
                     </tr>
                 </thead>
@@ -43,13 +43,13 @@
                             <th rowspan="2" scope="row" th:text="${color.patientName}"></th>
                             <div th:each="rpColor : ${color.rp}">
                                 <td th:colspan="${rpColor.day}" th:if="${rpColor.rp == '余白'}"></td>
-                                <td class="table-primary" th:colspan="${rpColor.day}"  th:if="${rpColor.rp == '処方'}"></td>
+                                <td class="table-danger" th:colspan="${rpColor.day}"  th:if="${rpColor.rp == '処方'}"></td>
                             </div>
                         </tr>
                         <tr>
                             <div th:each="doneColor : ${color.done}">
                                 <td th:colspan="${doneColor.day}" th:if="${doneColor.done == '余白'}"></td>
-                                <td class="table-success" th:colspan="${doneColor.day}" th:if="${doneColor.done == '配達済'}"></td>
+                                <td class="table-warning" th:colspan="${doneColor.day}" th:if="${doneColor.done == '配達済'}"></td>
                             </div>
                         </tr>
                     </div>

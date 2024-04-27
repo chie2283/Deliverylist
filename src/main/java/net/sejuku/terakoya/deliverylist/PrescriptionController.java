@@ -11,7 +11,11 @@ import java.time.LocalDate;
 
 import static net.sejuku.terakoya.deliverylist.PrescriptionDao.PrescriptionInfo;
 import static net.sejuku.terakoya.deliverylist.PrescriptionDao.PrescriptionRecord;
+
 @Controller
+/**
+ * 処方記録の画面のコントローラー
+ */
 @RequestMapping(value = "/prescription")
 public class PrescriptionController {
     Logger logger = LoggerFactory.getLogger(PrescriptionController.class);
@@ -33,6 +37,13 @@ public class PrescriptionController {
                                 Boolean done,
                                 Boolean isEdit) {}
 
+    /**
+     * 処方記録で使用するクラスのインスタンス化
+     * @param prescriptionDao　処方のデータベース関連の処理をまとめたクラス
+     * @param destinationDao　配達先のデータベース関連の処理をまとめたクラス
+     * @param patientDao　患者のデータベース関連の処理をまとめたクラス
+     * @param enteralNutrientDao　栄養剤のデータベース関連の処理をまとめたクラス
+     */
     @Autowired
     PrescriptionController(PrescriptionDao prescriptionDao, DestinationDao destinationDao, PatientDao patientDao, EnteralNutrientDao enteralNutrientDao) {
         this.prescriptionDao = prescriptionDao;
@@ -41,6 +52,12 @@ public class PrescriptionController {
         this.enteralNutrientDao = enteralNutrientDao;
     }
 
+    /**
+     * 画面表示処理
+     * @param destinationId　配達先のid
+     * @param model　モデル
+     * @return　表示画面のHTMLファイル
+     */
     @GetMapping("/{destinationId}")
     public String getIndex(@PathVariable(name="destinationId") String destinationId, Model model) {
         logger.debug("index get in");
@@ -50,6 +67,12 @@ public class PrescriptionController {
         return "prescription/index";
     }
 
+    /**
+     * 配達先一覧画面・カレンダー画面から処方記録画面への表示処理
+     * @param destinationId　配達先のid
+     * @param model　モデル
+     * @return　遷移先のHTMLファイル
+     */
     @PostMapping("/")
     public String postIndex(@RequestParam(name="destinationId") String destinationId, Model model) {
         logger.debug("index post in");
@@ -59,6 +82,12 @@ public class PrescriptionController {
         return "prescription/index";
     }
 
+    /**
+     * 削除処理
+     * @param id　削除する処方記録のid
+     * @param destinationId　配達先のid
+     * @return　表示画面のURL
+     */
     @PostMapping("/delete")
     public String delete(@RequestParam String id, String destinationId) {
         logger.info("delete id is {}", id);
@@ -66,6 +95,13 @@ public class PrescriptionController {
         return "redirect:/prescription/" + destinationId;
     }
 
+    /**
+     * 編集画面表示処理
+     * @param id　編集する処方記録のid
+     * @param destinationId　配達先のid
+     * @param model　モデル
+     * @return　遷移先のHTMLファイル
+     */
     @GetMapping("/edit")
     public String edit(@RequestParam String id, String destinationId, Model model) {
         logger.debug("edit in");
@@ -78,6 +114,12 @@ public class PrescriptionController {
         return "prescription/edit";
     }
 
+    /**
+     * 新規登録画面表示処理
+     * @param destinationId　配達先のid
+     * @param model　モデル
+     * @return　遷移先のHTMLファイル
+     */
     @GetMapping("/new")
     public String new_entry(@RequestParam(name="destinationId") String destinationId, Model model) {
         logger.debug("new in");
@@ -91,6 +133,11 @@ public class PrescriptionController {
         return "prescription/edit";
     }
 
+    /**
+     * 登録処理
+     * @param form　処方記録フォームの入力データの取得
+     * @return　表示画面のURL
+     */
     @PostMapping("/register")
     public String registry(@ModelAttribute PrescriptionEditForm form) {
         logger.debug("registry in {}", form.id);

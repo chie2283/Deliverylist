@@ -18,14 +18,14 @@
                 </form>
             </div>
         </nav>
-        <div class="container text-center">
-            <h1 th:text="${destinationName}"></h1>
+        <div class="container">
+            <h1 class="text-center" th:text="${destinationName}"></h1>
             <table class="table">
                 <thead></thead>
                 <tbody>
                 <tr>
-                    <th>名前</th>
-                    <th>種類</th>
+                    <th>患者氏名</th>
+                    <th>栄養剤種類</th>
                     <th>1日用量</th>
                     <th>処方日</th>
                     <th>処方日数</th>
@@ -69,9 +69,15 @@
                 </tbody>
             </table>
             <form action="/prescription/new" method="get">
-                <div class="d-flex justify-content-start">
+                <div class="d-inline-flex p-2">
                     <input type="hidden" name="destinationId" th:value="${destinationId}" />
                     <button type="submit" class="btn btn-primary">追加</button>
+                </div>
+            </form>
+            <form th:action="@{/patient/}" method="post">
+                <div class="d-inline-flex p-2">
+                    <input type="hidden" name="destinationId" th:value="${destinationId}" />
+                    <button type="submit" class="btn btn-primary">患者の登録・編集</button>
                 </div>
             </form>
         </div>
